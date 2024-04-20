@@ -1,6 +1,8 @@
 #ifndef _VI_NODE_H__
 #define _VI_NODE_H__
 
+#include "rclcpp/rclcpp.hpp"
+
 /*
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
@@ -25,7 +27,7 @@
 
 namespace value_iteration2{
 
-class ViNode{
+class ViNode : public rclcpp::Node {
 
 public:
 	ViNode();

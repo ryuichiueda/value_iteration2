@@ -3,7 +3,7 @@
 
 namespace value_iteration2{
 
-ViNode::ViNode()// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false")
+ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false")
 {
 	/*
 	setActions();
