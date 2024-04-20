@@ -38,8 +38,8 @@ public:
 
 	/*
 	void pubValueFunction(void);
-	void decision(void);
 	*/
+	void decision(void);
 private:
 	/*
 	vector<Action> *actions_;

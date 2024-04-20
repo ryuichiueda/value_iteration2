@@ -22,6 +22,15 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 	nav_msgs::GetMap::Response res;
 	setMap(res);
 	*/
+	int step = 0;
+
+	rclcpp::WallRate loop(10);
+	while (rclcpp::ok()) {
+		decision();
+
+		loop.sleep();
+		step++;
+	}
 }
 
 ViNode::~ViNode() 
@@ -194,9 +203,12 @@ void ViNode::pubValueFunction(void)
 	vi_->makeValueFunctionMap(map, cost_drawing_threshold_, x_, y_, yaw_);
 	pub_value_function_.publish(map);
 }
+*/
 
 void ViNode::decision(void)
 {
+	RCLCPP_INFO(this->get_logger(),"Hell world!");
+	/*
 	if(not online_)
 		return; 
 
@@ -223,8 +235,8 @@ void ViNode::decision(void)
 		cmd_vel.angular.z = a->_delta_rot/180*M_PI;
 	}
 	pub_cmd_vel_.publish(cmd_vel);
+	*/
 }
-*/
 
 }
 
@@ -233,15 +245,18 @@ int main(int argc, char **argv)
 	rclcpp::init(argc,argv);
 	auto node = std::make_shared<value_iteration2::ViNode>();
 
+	/*
 	int step = 0;
 
 	rclcpp::WallRate loop(10);
 	while (rclcpp::ok()) {
+		node.decision();
+
 		loop.sleep();
 		step++;
 	}
+	*/
 	/*
-	ros::Rate loop_rate(10);
 	while(ros::ok()){
 		vi_node.decision();
 		
