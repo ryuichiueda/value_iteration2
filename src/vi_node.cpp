@@ -1,4 +1,5 @@
 #include "value_iteration2/vi_node.h"
+#include "rclcpp/rclcpp.hpp"
 
 namespace value_iteration{
 
@@ -226,8 +227,8 @@ void ViNode::decision(void)
 
 int main(int argc, char **argv)
 {
+	rclcpp::init(argc,argv);
 	/*
-	ros::init(argc,argv,"vi_node");
 	value_iteration::ViNode vi_node;
 
 	int step = 0;
