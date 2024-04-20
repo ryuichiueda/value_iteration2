@@ -229,10 +229,15 @@ int main(int argc, char **argv)
 {
 	rclcpp::init(argc,argv);
 	auto node = std::make_shared<value_iteration2::ViNode>();
-	/*
-	value_iteration::ViNode vi_node;
 
 	int step = 0;
+
+	rclcpp::WallRate loop(10);
+	while (rclcpp::ok()) {
+		loop.sleep();
+		step++;
+	}
+	/*
 	ros::Rate loop_rate(10);
 	while(ros::ok()){
 		vi_node.decision();
