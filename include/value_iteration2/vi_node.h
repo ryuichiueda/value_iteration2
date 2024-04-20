@@ -1,3 +1,6 @@
+//SPDX-FileCopyrightText: 2024 Ryuichi Ueda ryuichiueda@gmail.com
+//SPDX-License-Identifier: BSD-3-Clause
+
 #ifndef _VI_NODE_H__
 #define _VI_NODE_H__
 
