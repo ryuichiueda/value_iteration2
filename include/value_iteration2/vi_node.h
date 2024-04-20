@@ -1,6 +1,7 @@
 #ifndef _VI_NODE_H__
 #define _VI_NODE_H__
 
+/*
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 #include <value_iteration/ViAction.h>
@@ -20,6 +21,7 @@
 #include <tf/tf.h>
 
 #include <tf/transform_listener.h>
+*/
 
 namespace value_iteration{
 
@@ -29,9 +31,12 @@ public:
 	ViNode();
 	~ViNode();
 
+	/*
 	void pubValueFunction(void);
 	void decision(void);
+	*/
 private:
+	/*
 	vector<Action> *actions_;
 	shared_ptr<ValueIteratorLocal> vi_;
 	ros::NodeHandle nh_;
@@ -64,6 +69,7 @@ private:
 	bool online_;
 
 	int cost_drawing_threshold_;
+	*/
 };
 
 }

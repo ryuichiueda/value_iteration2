@@ -2,8 +2,9 @@
 
 namespace value_iteration{
 
-ViNode::ViNode() : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false")
+ViNode::ViNode()// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false")
 {
+	/*
 	setActions();
 
 	int thread_num;
@@ -16,13 +17,15 @@ ViNode::ViNode() : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false
 
 	nav_msgs::GetMap::Response res;
 	setMap(res);
+	*/
 }
 
 ViNode::~ViNode() 
 {
-	delete actions_;
+	//delete actions_;
 }
 
+/*
 void ViNode::setMap(nav_msgs::GetMap::Response &res)
 {
 	int theta_cell_num;
@@ -217,11 +220,13 @@ void ViNode::decision(void)
 	}
 	pub_cmd_vel_.publish(cmd_vel);
 }
+*/
 
 }
 
 int main(int argc, char **argv)
 {
+	/*
 	ros::init(argc,argv,"vi_node");
 	value_iteration::ViNode vi_node;
 
@@ -238,5 +243,6 @@ int main(int argc, char **argv)
 		step++;
 	}
 
+	*/
 	return 0;
 }
