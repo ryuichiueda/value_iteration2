@@ -1,7 +1,7 @@
 #include "value_iteration2/vi_node.h"
 #include "rclcpp/rclcpp.hpp"
 
-namespace value_iteration{
+namespace value_iteration2{
 
 ViNode::ViNode()// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false")
 {
@@ -228,6 +228,7 @@ void ViNode::decision(void)
 int main(int argc, char **argv)
 {
 	rclcpp::init(argc,argv);
+	auto node = std::make_shared<value_iteration2::ViNode>();
 	/*
 	value_iteration::ViNode vi_node;
 

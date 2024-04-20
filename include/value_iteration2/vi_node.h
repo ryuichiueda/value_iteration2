@@ -23,7 +23,7 @@
 #include <tf/transform_listener.h>
 */
 
-namespace value_iteration{
+namespace value_iteration2{
 
 class ViNode{
 
