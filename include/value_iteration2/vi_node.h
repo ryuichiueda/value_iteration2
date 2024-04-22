@@ -64,7 +64,9 @@ private:
 
 	void scanReceived(const sensor_msgs::LaserScan::ConstPtr &msg);
 
+	*/
 	void setActions(void);
+	/*
 	void setMap(nav_msgs::GetMap::Response &res);
 	void setCommunication(void);
 

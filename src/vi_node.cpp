@@ -8,9 +8,9 @@ namespace value_iteration2{
 
 ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false")
 {
-	/*
 	setActions();
 
+	/*
 	int thread_num;
 	private_nh_.param("thread_num", thread_num, 1);
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
@@ -27,6 +27,11 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 	rclcpp::WallRate loop(10);
 	while (rclcpp::ok()) {
 		decision();
+
+		/*
+		if(step % 30 == 0)
+			vi_node.pubValueFunction();
+			*/
 
 		loop.sleep();
 		step++;
@@ -110,9 +115,11 @@ void ViNode::setCommunication(void)
 	srv_value_ = nh_.advertiseService("/value", &ViNode::serveValue, this);
 }
 
+*/
 void ViNode::setActions(void)
 {
 	XmlRpc::XmlRpcValue params;
+	/*
 	nh_.getParam("/vi_node", params);
 	ROS_ASSERT(params.getType() == XmlRpc::XmlRpcValue::TypeStruct);
 	auto &action_list = params["action_list"];
@@ -125,9 +132,10 @@ void ViNode::setActions(void)
 
 		auto &b = actions_->back();
 		ROS_INFO("set an action: %s, %f, %f", b._name.c_str(), b._delta_fw, b._delta_rot);
-	}
+	}*/
 }
 
+/*
 void ViNode::scanReceived(const sensor_msgs::LaserScan::ConstPtr &msg)
 {
 	vi_->setLocalCost(msg, x_, y_, yaw_);
@@ -245,17 +253,6 @@ int main(int argc, char **argv)
 	rclcpp::init(argc,argv);
 	auto node = std::make_shared<value_iteration2::ViNode>();
 
-	/*
-	int step = 0;
-
-	rclcpp::WallRate loop(10);
-	while (rclcpp::ok()) {
-		node.decision();
-
-		loop.sleep();
-		step++;
-	}
-	*/
 	/*
 	while(ros::ok()){
 		vi_node.decision();
