@@ -7,6 +7,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include <vector>
 #include <value_iteration2/Action.h>
+#include "value_iteration2/ValueIteratorLocal.h"
 
 /*
 #include <ros/ros.h>
@@ -17,7 +18,6 @@
 
 #include "nav_msgs/GetMap.h"
 #include "nav_msgs/OccupancyGrid.h"
-#include "value_iteration/ValueIteratorLocal.h"
 #include <iostream>
 #include <thread>
 
@@ -42,8 +42,8 @@ public:
 	void decision(void);
 private:
 	std::vector<Action> *actions_;
+	std::shared_ptr<ValueIteratorLocal> vi_;
 	/*
-	shared_ptr<ValueIteratorLocal> vi_;
 	ros::NodeHandle nh_;
 	ros::NodeHandle private_nh_;
 
