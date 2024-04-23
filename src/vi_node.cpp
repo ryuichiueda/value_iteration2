@@ -18,12 +18,10 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 
 
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
+	setCommunication();
 
 	/*
 
-	private_nh_.param("cost_drawing_threshold", cost_drawing_threshold_, 60);
-
-	setCommunication();
 
 	nav_msgs::GetMap::Response res;
 	setMap(res);
@@ -102,9 +100,11 @@ void ViNode::setMap(nav_msgs::GetMap::Response &res)
 		exit(1);
 	}
 }
+*/
 
 void ViNode::setCommunication(void)
 {
+	/*
 	private_nh_.param("online", online_, false);
 	if(online_){
 		ROS_INFO("SET ONLINE");
@@ -119,9 +119,9 @@ void ViNode::setCommunication(void)
 	as_->start();
 	srv_policy_ = nh_.advertiseService("/policy", &ViNode::servePolicy, this);
 	srv_value_ = nh_.advertiseService("/value", &ViNode::serveValue, this);
+*/
 }
 
-*/
 void ViNode::setActions(void)
 {
 	actions_ = new std::vector<Action>();

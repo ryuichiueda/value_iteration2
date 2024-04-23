@@ -66,9 +66,9 @@ private:
 
 	*/
 	void setActions(void);
+	void setCommunication(void);
 	/*
 	void setMap(nav_msgs::GetMap::Response &res);
-	void setCommunication(void);
 	*/
 
 	double x_, y_, yaw_;
