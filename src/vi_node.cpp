@@ -125,22 +125,6 @@ void ViNode::setActions(void)
 	actions_->push_back(Action("rightfw", 0.2, -20.0, 0));
 	actions_->push_back(Action("left", 0.0, 20.0, 0));
 	actions_->push_back(Action("leftfw", 0.2, 20.0, 0));
-	//std::cout << actions_->at(0).name_ << std::endl;
-	/*
-	XmlRpc::XmlRpcValue params;
-	nh_.getParam("/vi_node", params);
-	ROS_ASSERT(params.getType() == XmlRpc::XmlRpcValue::TypeStruct);
-	auto &action_list = params["action_list"];
-	ROS_ASSERT(action_list.getType() == XmlRpc::XmlRpcValue::TypeArray);
-	actions_ = new vector<Action>();
-
-	for(int i=0; i<action_list.size(); i++){
-		auto &a = action_list[i];
-		actions_->push_back(Action(a["name"], a["onestep_forward_m"], a["onestep_rotation_deg"], i));
-
-		auto &b = actions_->back();
-		ROS_INFO("set an action: %s, %f, %f", b._name.c_str(), b._delta_fw, b._delta_rot);
-	}*/
 }
 
 /*
