@@ -17,6 +17,7 @@ find_package(rclcpp REQUIRED)
 ament_auto_find_build_dependencies()
 ament_auto_add_executable(vi_node
   src/Action.cpp
+  src/SweepWorkerStatus.cpp
   src/ValueIterator.cpp
   src/ValueIteratorLocal.cpp
   src/vi_node.cpp

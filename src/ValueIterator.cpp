@@ -70,8 +70,9 @@ void ValueIterator::setMapWithCostGrid(nav_msgs::OccupancyGrid &map, int theta_c
 	setStateTransition();
 	setSweepOrders();
 }
+#endif
 
-bool ValueIterator::finished(std_msgs::UInt32MultiArray &sweep_times, std_msgs::Float32MultiArray &deltas)
+bool ValueIterator::finished(std_msgs::msg::UInt32MultiArray &sweep_times, std_msgs::msg::Float32MultiArray &deltas)
 { 
 	sweep_times.data.resize(thread_num_);
 	deltas.data.resize(thread_num_);
@@ -85,6 +86,7 @@ bool ValueIterator::finished(std_msgs::UInt32MultiArray &sweep_times, std_msgs::
 	return finish;
 }
 
+#if 0
 void ValueIterator::setStateTransition(void)
 {
 	std::vector<StateTransition> theta_state_transitions;

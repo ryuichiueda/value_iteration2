@@ -3,7 +3,11 @@
 
 #include "Action.h"
 #include "nav_msgs/msg/occupancy_grid.hpp"
+#include <std_msgs/msg/u_int32_multi_array.hpp>
+#include <std_msgs/msg/float32_multi_array.hpp>
 #include "State.h"
+#include "SweepWorkerStatus.h"
+#include <map>
 
 /*
 #include "ros/ros.h"
@@ -13,7 +17,6 @@
 #include <fstream>
 #include <vector>
 
-#include "SweepWorkerStatus.h"
 */
 
 namespace value_iteration2 {
@@ -76,11 +79,11 @@ public:
 			double x, double y, double yaw_rad);
 */
 /* control of value iteration threads */
+	std::map<int, SweepWorkerStatus> thread_status_; 
 	/*
-	map<int, SweepWorkerStatus> thread_status_; 
-	bool finished(std_msgs::UInt32MultiArray &sweep_times, std_msgs::Float32MultiArray &deltas);
 	void setCancel(void);
 	*/
+	bool finished(std_msgs::msg::UInt32MultiArray &sweep_times, std_msgs::msg::Float32MultiArray &deltas);
 protected:
 	std::string status_;
 
