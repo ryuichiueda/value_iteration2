@@ -9,10 +9,11 @@ namespace value_iteration2{
 ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(0.0), online_("false")
 {
 	setActions();
+	declare_parameter("global_thread_num", 1);
+	int thread_num = get_parameter("global_thread_num").as_int();
+	RCLCPP_INFO(this->get_logger(),"Global thread num: %d", thread_num);
 
 	/*
-	int thread_num;
-	private_nh_.param("thread_num", thread_num, 1);
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
 
 	private_nh_.param("cost_drawing_threshold", cost_drawing_threshold_, 60);
