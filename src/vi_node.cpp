@@ -118,8 +118,11 @@ void ViNode::setCommunication(void)
 */
 void ViNode::setActions(void)
 {
-	XmlRpc::XmlRpcValue params;
+	actions_ = new std::vector<Action>();
+	actions_->push_back(Action("forward", 0.3, 0.0, 0));
+	std::cout << actions_->at(0).name_ << std::endl;
 	/*
+	XmlRpc::XmlRpcValue params;
 	nh_.getParam("/vi_node", params);
 	ROS_ASSERT(params.getType() == XmlRpc::XmlRpcValue::TypeStruct);
 	auto &action_list = params["action_list"];

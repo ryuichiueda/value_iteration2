@@ -8,20 +8,26 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
-find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_auto REQUIRED)
+#find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(vi_node src/vi_node.cpp)
-ament_target_dependencies(vi_node rclcpp)
-
-target_include_directories(vi_node
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+ament_auto_find_build_dependencies()
+ament_auto_add_executable(vi_node
+  src/Action.cpp
+  src/vi_node.cpp
 )
+
+#ament_target_dependencies(vi_node rclcpp)
+
+#target_include_directories(vi_node
+#  PUBLIC
+#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#    $<INSTALL_INTERFACE:include>
+#)
 
 install(TARGETS
   vi_node

@@ -5,11 +5,12 @@
 #define _VI_NODE_H__
 
 #include "rclcpp/rclcpp.hpp"
+#include <vector>
+#include <value_iteration2/Action.h>
 
 /*
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
-#include <value_iteration/ViAction.h>
 
 #include "geometry_msgs/Twist.h"
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
@@ -18,7 +19,6 @@
 #include "nav_msgs/OccupancyGrid.h"
 #include "value_iteration/ValueIteratorLocal.h"
 #include <iostream>
-#include <vector>
 #include <thread>
 
 #include <grid_map_msgs/GetGridMap.h>
@@ -41,8 +41,8 @@ public:
 	*/
 	void decision(void);
 private:
+	std::vector<Action> *actions_;
 	/*
-	vector<Action> *actions_;
 	shared_ptr<ValueIteratorLocal> vi_;
 	ros::NodeHandle nh_;
 	ros::NodeHandle private_nh_;
