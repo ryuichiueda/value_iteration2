@@ -16,7 +16,6 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 	RCLCPP_INFO(this->get_logger(),"Global thread num: %d", thread_num);
 	cost_drawing_threshold_ = get_parameter("cost_drawing_threshold").as_int();
 
-
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
 	setCommunication();
 
@@ -109,8 +108,8 @@ void ViNode::setCommunication(void)
 	RCLCPP_INFO(this->get_logger(),"Online: %s", online_ ? "true" : "false");
 
 	if(online_){
+		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
 		/*
-		pub_cmd_vel_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 2, true);
 		sub_laser_scan_ = nh_.subscribe("scan", 2, &ViNode::scanReceived, this);
 		*/
 	}

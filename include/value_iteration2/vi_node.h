@@ -8,12 +8,12 @@
 #include <vector>
 #include <value_iteration2/Action.h>
 #include "value_iteration2/ValueIteratorLocal.h"
+#include "geometry_msgs/msg/twist.hpp"
 
 /*
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 
-#include "geometry_msgs/Twist.h"
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
 #include "nav_msgs/GetMap.h"
@@ -51,7 +51,8 @@ private:
 	ros::ServiceServer srv_value_;
 	*/
 
-	//ros::Publisher pub_cmd_vel_;
+	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_cmd_vel_;
+	//Publisher pub_cmd_vel_;
 	/*
 	ros::Publisher pub_value_function_;
 	ros::Subscriber sub_laser_scan_;
