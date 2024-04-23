@@ -9,6 +9,7 @@
 #include <value_iteration2/Action.h>
 #include "value_iteration2/ValueIteratorLocal.h"
 #include "geometry_msgs/msg/twist.hpp"
+#include "sensor_msgs/msg/laser_scan.hpp"
 
 /*
 #include <ros/ros.h>
@@ -52,6 +53,7 @@ private:
 	*/
 
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_cmd_vel_;
+	rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_laser_scan_;
 	//Publisher pub_cmd_vel_;
 	/*
 	ros::Publisher pub_value_function_;
