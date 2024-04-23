@@ -203,12 +203,14 @@ void ValueIterator::valueIterationWorker(int times, int id)
 
 	thread_status_[id]._finished = true;
 }
+#endif
 
 int ValueIterator::toIndex(int ix, int iy, int it)
 {
 	return it + ix*cell_num_t_ + iy*(cell_num_t_*cell_num_x_);
 }
 
+#if 0
 bool ValueIterator::inMapArea(int ix, int iy)
 {
 	return ix >= 0 and ix < cell_num_x_ and iy >= 0 and iy < cell_num_y_;
@@ -457,6 +459,5 @@ bool ValueIterator::isCalculated(void)
 	return status_ == "calculated";
 }
 #endif
-
 }
 

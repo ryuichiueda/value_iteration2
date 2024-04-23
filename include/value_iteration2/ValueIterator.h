@@ -2,19 +2,18 @@
 #define VALUE_ITERATOR_
 
 #include "Action.h"
+#include "nav_msgs/msg/occupancy_grid.hpp"
+#include "State.h"
+
 /*
 #include "ros/ros.h"
-#include "std_msgs/UInt32MultiArray.h"
-#include "std_msgs/Float32MultiArray.h"
 #include "nav_msgs/GetMap.h"
-#include "nav_msgs/OccupancyGrid.h"
 #include "sensor_msgs/LaserScan.h"
 #include <grid_map_msgs/GetGridMap.h>
 #include <fstream>
 #include <vector>
 
 #include "SweepWorkerStatus.h"
-#include "State.h"
 */
 
 namespace value_iteration2 {
@@ -22,7 +21,7 @@ namespace value_iteration2 {
 class ValueIterator{
 protected: 
 /* value iteration */
-	//std::vector<State> states_;
+	std::vector<State> states_;
 	std::vector<Action> &actions_;
 	/*
 	std::vector<std::vector<int> > sweep_orders_;
@@ -34,9 +33,9 @@ public:
 	void valueIterationWorker(int times, int id);
 */
 /* calculation */
-	/*
 protected: 
 	int toIndex(int ix, int iy, int it);
+	/*
 	bool inMapArea(int ix, int iy);
 	void cellDelta(double x, double y, double t, int &ix, int &iy, int &it);
 	void noNoiseStateTransition(Action &a, double from_x, double from_y, double from_t, double &to_x, double &to_y, double &to_t);

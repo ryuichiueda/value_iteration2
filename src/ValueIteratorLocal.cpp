@@ -1,4 +1,6 @@
 #include "value_iteration2/ValueIteratorLocal.h"
+#include "value_iteration2/State.h"
+#include <cmath>
 
 namespace value_iteration2 {
 
@@ -89,16 +91,17 @@ Action *ValueIteratorLocal::posToAction(double x, double y, double t_rad)
 	return NULL;
 
 }
+*/
 
 bool ValueIteratorLocal::inLocalArea(int ix, int iy)
 {
 	return ix >= local_ix_min_ and ix <= local_ix_max_ and iy >= local_iy_min_ and iy <= local_iy_max_;
 }
 
-void ValueIteratorLocal::setLocalCost(const sensor_msgs::LaserScan::ConstPtr &msg, double x, double y, double t)
+void ValueIteratorLocal::setLocalCost(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg, double x, double y, double t)
 {
 	double start_angle = msg->angle_min;
-	for(int i=0; i<msg->ranges.size(); i++){
+	for(unsigned long int i=0; i<msg->ranges.size(); i++){
 		double a = t + msg->angle_increment*i + start_angle;
 
 		double lx = x + msg->ranges[i]*cos(a);
@@ -137,6 +140,7 @@ void ValueIteratorLocal::setLocalCost(const sensor_msgs::LaserScan::ConstPtr &ms
 	}
 }
 
+/*
 uint64_t ValueIteratorLocal::actionCostLocal(State &s, Action &a)
 {
 	uint64_t cost = 0;

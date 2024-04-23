@@ -2,6 +2,7 @@
 #define VALUE_ITERATOR_LOCAL_
 
 #include "ValueIterator.h"
+#include "sensor_msgs/msg/laser_scan.hpp"
 
 namespace value_iteration2 {
 
@@ -9,6 +10,7 @@ class ValueIteratorLocal : public ValueIterator{
 public:
 	ValueIteratorLocal(std::vector<Action> &actions, int thread_num);
 
+	void setLocalCost(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg, double x, double y, double t);
 	/*
 	uint64_t valueIterationLocal(State &s);
 	void localValueIterationWorker(int id);
@@ -19,15 +21,17 @@ public:
 
 	Action *posToAction(double x, double y, double t_rad);
 
-	void setLocalCost(const sensor_msgs::LaserScan::ConstPtr &msg, double x, double y, double t);
 	void setLocalWindow(double x, double y);
 	void makeLocalValueFunctionMap(nav_msgs::OccupancyGrid &map, int threshold, 
 			double x, double y, double yaw_rad);
-
+*/
 private: 
+	/*
 	void localValueIterationLoop(void);
 
+	*/
 	bool inLocalArea(int ix, int iy);
+	/*
 	uint64_t actionCostLocal(State &s, Action &a);
 	*/
 

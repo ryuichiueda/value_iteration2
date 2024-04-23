@@ -145,7 +145,7 @@ void ViNode::setActions(void)
 
 void ViNode::scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg)
 {
-	//vi_->setLocalCost(msg, x_, y_, yaw_);
+	vi_->setLocalCost(msg, x_, y_, yaw_);
 }
 
 /*
