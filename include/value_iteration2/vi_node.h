@@ -49,8 +49,10 @@ private:
 
 	ros::ServiceServer srv_policy_;
 	ros::ServiceServer srv_value_;
+	*/
 
-	ros::Publisher pub_cmd_vel_;
+	//ros::Publisher pub_cmd_vel_;
+	/*
 	ros::Publisher pub_value_function_;
 	ros::Subscriber sub_laser_scan_;
 

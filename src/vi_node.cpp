@@ -104,14 +104,18 @@ void ViNode::setMap(nav_msgs::GetMap::Response &res)
 
 void ViNode::setCommunication(void)
 {
-	/*
-	private_nh_.param("online", online_, false);
+	declare_parameter("online", false);
+	online_ = get_parameter("online").as_bool();
+	RCLCPP_INFO(this->get_logger(),"Online: %s", online_ ? "true" : "false");
+
 	if(online_){
-		ROS_INFO("SET ONLINE");
+		/*
 		pub_cmd_vel_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 2, true);
 		sub_laser_scan_ = nh_.subscribe("scan", 2, &ViNode::scanReceived, this);
+		*/
 	}
 
+	/*
 	pub_value_function_ = nh_.advertise<nav_msgs::OccupancyGrid>("value_function", 2, true);
 
 	as_.reset(new actionlib::SimpleActionServer<value_iteration::ViAction>( nh_, "vi_controller",
