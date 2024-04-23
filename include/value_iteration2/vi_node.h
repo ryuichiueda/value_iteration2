@@ -69,6 +69,7 @@ private:
 	/*
 	void setMap(nav_msgs::GetMap::Response &res);
 	void setCommunication(void);
+	*/
 
 	double x_, y_, yaw_;
 
@@ -76,7 +77,6 @@ private:
 	bool online_;
 
 	int cost_drawing_threshold_;
-	*/
 };
 
 }

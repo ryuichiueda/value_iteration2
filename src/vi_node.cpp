@@ -10,8 +10,13 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 {
 	setActions();
 	declare_parameter("global_thread_num", 1);
+	declare_parameter("cost_drawing_threshold", 60);
+
 	int thread_num = get_parameter("global_thread_num").as_int();
 	RCLCPP_INFO(this->get_logger(),"Global thread num: %d", thread_num);
+	cost_drawing_threshold_ = get_parameter("cost_drawing_threshold").as_int();
+
+
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
 
 	/*
