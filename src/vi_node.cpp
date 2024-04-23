@@ -120,7 +120,12 @@ void ViNode::setActions(void)
 {
 	actions_ = new std::vector<Action>();
 	actions_->push_back(Action("forward", 0.3, 0.0, 0));
-	std::cout << actions_->at(0).name_ << std::endl;
+	actions_->push_back(Action("back", -0.2, 0.0, 0));
+	actions_->push_back(Action("right", 0.0, -20.0, 0));
+	actions_->push_back(Action("rightfw", 0.2, -20.0, 0));
+	actions_->push_back(Action("left", 0.0, 20.0, 0));
+	actions_->push_back(Action("leftfw", 0.2, 20.0, 0));
+	//std::cout << actions_->at(0).name_ << std::endl;
 	/*
 	XmlRpc::XmlRpcValue params;
 	nh_.getParam("/vi_node", params);
