@@ -109,6 +109,13 @@ void ViNode::setCommunication(void)
 
 	if(online_){
 		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
+		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("scan", 1,
+				std::bind(&ViNode::scanReceived, this, std::placeholders::_1));
+		/*
+		laser_scan_sub_ = create_subscription<sensor_msgs::msg::LaserScan>(
+          "scan", 2, std::bind(&EMcl2Node::cbScan, this, std::placeholders::_1));
+	  */
+
 		/*
 		sub_laser_scan_ = nh_.subscribe("scan", 2, &ViNode::scanReceived, this);
 		*/
@@ -136,12 +143,12 @@ void ViNode::setActions(void)
 	actions_->push_back(Action("leftfw", 0.2, 20.0, 0));
 }
 
-/*
-void ViNode::scanReceived(const sensor_msgs::LaserScan::ConstPtr &msg)
+void ViNode::scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg)
 {
-	vi_->setLocalCost(msg, x_, y_, yaw_);
+	//vi_->setLocalCost(msg, x_, y_, yaw_);
 }
 
+/*
 bool ViNode::servePolicy(grid_map_msgs::GetGridMap::Request& request, grid_map_msgs::GetGridMap::Response& response)
 {
 	vi_->policyWriter(response);
