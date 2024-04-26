@@ -25,20 +25,6 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 	nav_msgs::GetMap::Response res;
 	setMap(res);
 	*/
-	int step = 0;
-
-	rclcpp::WallRate loop(10);
-	while (rclcpp::ok()) {
-		decision();
-
-		/*
-		if(step % 30 == 0)
-			vi_node.pubValueFunction();
-			*/
-
-		loop.sleep();
-		step++;
-	}
 }
 
 ViNode::~ViNode() 
@@ -111,14 +97,7 @@ void ViNode::setCommunication(void)
 		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
 		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("/scan", 1,
 				std::bind(&ViNode::scanReceived, this, std::placeholders::_1));
-		/*
-		laser_scan_sub_ = create_subscription<sensor_msgs::msg::LaserScan>(
-          "scan", 2, std::bind(&EMcl2Node::cbScan, this, std::placeholders::_1));
-	  */
-
-		/*
-		sub_laser_scan_ = nh_.subscribe("scan", 2, &ViNode::scanReceived, this);
-		*/
+		RCLCPP_INFO(this->get_logger(),"set scan");
 	}
 
 	/*
@@ -224,6 +203,7 @@ void ViNode::pubValueFunction(void)
 
 void ViNode::decision(void)
 {
+	RCLCPP_INFO(this->get_logger(),"HELL");
 	/*
 	if(not online_)
 		return; 
@@ -260,19 +240,19 @@ int main(int argc, char **argv)
 {
 	rclcpp::init(argc,argv);
 	auto node = std::make_shared<value_iteration2::ViNode>();
+	int step = 0;
 
-	/*
-	while(ros::ok()){
-		vi_node.decision();
-		
+	rclcpp::WallRate loop(10);
+	while (rclcpp::ok()) {
+		node->decision();
+
+		/*
 		if(step % 30 == 0)
 			vi_node.pubValueFunction();
+			*/
 
-		ros::spinOnce();
-		loop_rate.sleep();
+		loop.sleep();
 		step++;
 	}
-
-	*/
 	return 0;
 }
