@@ -243,16 +243,17 @@ int main(int argc, char **argv)
 	int step = 0;
 
 	rclcpp::WallRate loop(10);
+	rclcpp::spin(node);
+	/*
 	while (rclcpp::ok()) {
 		node->decision();
 
-		/*
-		if(step % 30 == 0)
-			vi_node.pubValueFunction();
-			*/
+		//if(step % 30 == 0)
+		//	vi_node.pubValueFunction();
+		//
 
 		loop.sleep();
 		step++;
-	}
+	}*/
 	return 0;
 }
