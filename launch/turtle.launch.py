@@ -9,8 +9,6 @@ def generate_launch_description():
 
     tb3_gazebo_launch = launch.actions.IncludeLaunchDescription(
       PythonLaunchDescriptionSource([tb3_gazebo_share_dir + "/launch/turtlebot3_world.launch.py"]),
-        launch_arguments={
-        }.items()
     )
 
     config = os.path.join(
