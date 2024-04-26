@@ -23,17 +23,15 @@ ament_auto_add_executable(vi_node
   src/vi_node.cpp
 )
 
-#ament_target_dependencies(vi_node rclcpp)
-
-#target_include_directories(vi_node
-#  PUBLIC
-#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#    $<INSTALL_INTERFACE:include>
-#)
-
 install(TARGETS
   vi_node
 DESTINATION lib/${PROJECT_NAME})
+
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME})
+
+install(DIRECTORY config
+  DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

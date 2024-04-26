@@ -1,4 +1,4 @@
-vi_node:
+/**:
   ros__parameters:
     global_thread_num: 2
     local_thread_num: 1
