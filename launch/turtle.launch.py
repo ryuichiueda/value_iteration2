@@ -7,6 +7,12 @@ from launch_ros.actions import Node
 def generate_launch_description():
     tb3_gazebo_share_dir = get_package_share_directory("turtlebot3_gazebo")
 
+    tb3_gazebo_launch = launch.actions.IncludeLaunchDescription(
+      PythonLaunchDescriptionSource([tb3_gazebo_share_dir + "/launch/turtlebot3_world.launch.py"]),
+        launch_arguments={
+        }.items()
+    )
+
     config = os.path.join(
       get_package_share_directory('value_iteration2'),
       'config',
@@ -21,4 +27,7 @@ def generate_launch_description():
             parameters=[config],
         )
 
-    return launch.LaunchDescription([vi_node])
+    return launch.LaunchDescription([
+        tb3_gazebo_launch,
+        vi_node,
+    ])
