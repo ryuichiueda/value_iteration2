@@ -95,6 +95,8 @@ void ViNode::setCommunication(void)
 
 	if(online_){
 		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
+		timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
+
 		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("/scan", 1,
 				std::bind(&ViNode::scanReceived, this, std::placeholders::_1));
 		RCLCPP_INFO(this->get_logger(),"set scan");
@@ -240,7 +242,7 @@ int main(int argc, char **argv)
 {
 	rclcpp::init(argc,argv);
 	auto node = std::make_shared<value_iteration2::ViNode>();
-	int step = 0;
+//	int step = 0;
 
 	rclcpp::WallRate loop(10);
 	rclcpp::spin(node);
