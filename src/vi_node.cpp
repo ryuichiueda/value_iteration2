@@ -109,7 +109,7 @@ void ViNode::setCommunication(void)
 
 	if(online_){
 		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
-		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("scan", 1,
+		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("/scan", 1,
 				std::bind(&ViNode::scanReceived, this, std::placeholders::_1));
 		/*
 		laser_scan_sub_ = create_subscription<sensor_msgs::msg::LaserScan>(
@@ -145,6 +145,7 @@ void ViNode::setActions(void)
 
 void ViNode::scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg)
 {
+	RCLCPP_INFO(this->get_logger(),"received! %ld", msg->ranges.size());
 	vi_->setLocalCost(msg, x_, y_, yaw_);
 }
 
@@ -223,7 +224,6 @@ void ViNode::pubValueFunction(void)
 
 void ViNode::decision(void)
 {
-	RCLCPP_INFO(this->get_logger(),"Hell world!");
 	/*
 	if(not online_)
 		return; 
