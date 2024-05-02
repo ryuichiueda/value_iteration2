@@ -2,6 +2,7 @@
 //SPDX-License-Identifier: BSD-3-Clause
 
 #include "value_iteration2/vi_node.h"
+#include "nav_msgs/srv/get_map.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace value_iteration2{
@@ -20,8 +21,7 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 	setCommunication();
 
 	//nav_msgs::GetMap::Response res;
-	std::shared_ptr<nav_msgs::srv::GetMap::Response> res;
-        setMap(res);
+        setMap();
 }
 
 ViNode::~ViNode() 
@@ -29,8 +29,10 @@ ViNode::~ViNode()
 	delete actions_;
 }
 
-void ViNode::setMap(std::shared_ptr<nav_msgs::srv::GetMap::Response> &res)
+void ViNode::setMap(void)
 {
+	std::shared_ptr<nav_msgs::srv::GetMap::Response> res;
+
 	declare_parameter("theta_cell_num", 60);
 	declare_parameter("safety_radius", 0.2);
 	declare_parameter("safety_radius_penalty", 30.0);
