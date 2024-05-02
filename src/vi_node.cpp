@@ -18,6 +18,10 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
 	setCommunication();
+
+	//nav_msgs::GetMap::Response res;
+	std::shared_ptr<nav_msgs::srv::GetMap::Response> res;
+        setMap(res);
 }
 
 ViNode::~ViNode() 
@@ -25,25 +29,24 @@ ViNode::~ViNode()
 	delete actions_;
 }
 
-/*
-void ViNode::setMap(nav_msgs::GetMap::Response &res)
+void ViNode::setMap(std::shared_ptr<nav_msgs::srv::GetMap::Response> &res)
 {
-	int theta_cell_num;
-	double safety_radius;
-	double safety_radius_penalty;
-	double goal_margin_radius;
-	int goal_margin_theta;
+	declare_parameter("theta_cell_num", 60);
+	declare_parameter("safety_radius", 0.2);
+	declare_parameter("safety_radius_penalty", 30.0);
+	declare_parameter("goal_margin_radius", 0.2);
+	declare_parameter("goal_margin_theta", 10);
+	declare_parameter("map_type", "occupancy");
 
-	private_nh_.param("theta_cell_num", theta_cell_num, 60);
-	private_nh_.param("safety_radius", safety_radius, 0.2);
-	private_nh_.param("safety_radius_penalty", safety_radius_penalty, 30.0);
-	private_nh_.param("goal_margin_radius", goal_margin_radius, 0.2);
-	private_nh_.param("goal_margin_theta", goal_margin_theta, 10);
+	int theta_cell_num = get_parameter("theta_cell_num").as_int();
+	double safety_radius = get_parameter("safety_radius").as_int();
+	double safety_radius_penalty = get_parameter("safety_radius_penalty").as_double();
+	double goal_margin_radius = get_parameter("goal_margin_radius").as_double();
+	int goal_margin_theta = get_parameter("goal_margin_theta").as_int();
 
-	std::string map_type;
-	private_nh_.param("map_type", map_type, std::string("occupancy"));
-
+	std::string map_type = get_parameter("map_type").as_string();
 	if(map_type == "occupancy"){
+	/*
 		while(!ros::service::waitForService("/static_map", ros::Duration(3.0))){
 			ROS_INFO("Waiting for static_map");
 		}
@@ -73,12 +76,12 @@ void ViNode::setMap(nav_msgs::GetMap::Response &res)
 	
 		vi_->setMapWithCostGrid(res.map, theta_cell_num, safety_radius, safety_radius_penalty,
 			goal_margin_radius, goal_margin_theta);
+	*/
 	}else{
-		ROS_ERROR("NO SUPPORT MAP TYPE");
+		RCLCPP_INFO(this->get_logger(), "NO SUPPORT MAP TYPE");
 		exit(1);
 	}
 }
-*/
 
 void ViNode::setCommunication(void)
 {

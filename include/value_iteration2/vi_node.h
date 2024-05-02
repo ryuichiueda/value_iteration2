@@ -11,6 +11,7 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
+#include "nav_msgs/srv/get_map.hpp"
 
 /*
 #include <ros/ros.h>
@@ -18,7 +19,6 @@
 
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
-#include "nav_msgs/GetMap.h"
 #include <iostream>
 #include <thread>
 
@@ -68,9 +68,7 @@ private:
 
 	void setActions(void);
 	void setCommunication(void);
-	/*
-	void setMap(nav_msgs::GetMap::Response &res);
-	*/
+	void setMap(std::shared_ptr<nav_msgs::srv::GetMap::Response> &res);
 
 	double x_, y_, yaw_;
 
