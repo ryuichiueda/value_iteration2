@@ -88,15 +88,15 @@ void ViNode::setCommunication(void)
 
 	if(online_){
 		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 1);
-		timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
 
 		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("/scan", 1,
 				std::bind(&ViNode::scanReceived, this, std::placeholders::_1));
 		RCLCPP_INFO(this->get_logger(),"set scan");
 	}
 
+	timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
+	pub_value_function_ = create_publisher<nav_msgs::msg::OccupancyGrid>("/value_function", 2);
 	/*
-	pub_value_function_ = nh_.advertise<nav_msgs::OccupancyGrid>("value_function", 2, true);
 
 	as_.reset(new actionlib::SimpleActionServer<value_iteration::ViAction>( nh_, "vi_controller",
 				boost::bind(&ViNode::executeVi, this, _1), false));

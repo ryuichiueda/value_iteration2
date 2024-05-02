@@ -10,6 +10,7 @@
 #include "value_iteration2/ValueIteratorLocal.h"
 #include "geometry_msgs/msg/twist.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
+#include "nav_msgs/msg/occupancy_grid.hpp"
 
 /*
 #include <ros/ros.h>
@@ -18,7 +19,6 @@
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
 #include "nav_msgs/GetMap.h"
-#include "nav_msgs/OccupancyGrid.h"
 #include <iostream>
 #include <thread>
 
@@ -54,12 +54,9 @@ private:
 	*/
 
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_cmd_vel_;
+	rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr pub_value_function_;
 	rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_laser_scan_;
-	//Publisher pub_cmd_vel_;
 	/*
-	ros::Publisher pub_value_function_;
-	ros::Subscriber sub_laser_scan_;
-
 	tf::TransformListener tf_listener_;
 
 	shared_ptr<actionlib::SimpleActionServer<value_iteration::ViAction> > as_;
