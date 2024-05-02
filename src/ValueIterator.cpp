@@ -1,4 +1,5 @@
 #include "value_iteration2/ValueIterator.h"
+#include "rclcpp/rclcpp.hpp"
 /*
 #include <thread>
 #include <grid_map_ros/grid_map_ros.hpp>
@@ -8,13 +9,12 @@
 namespace value_iteration2 {
 
 ValueIterator::ValueIterator(std::vector<Action> &actions, int thread_num)
-	: actions_(actions), status_("init"), goal_x_(0.0), goal_y_(0.0), goal_t_(0), thread_num_(thread_num)
+	: actions_(actions), status_("init"), goal_x_(0.0), goal_y_(0.0), goal_t_(0), thread_num_(thread_num), ros_clock_(RCL_SYSTEM_TIME)
 {
 }
 
-#if 0
 
-void ValueIterator::setMapWithOccupancyGrid(nav_msgs::OccupancyGrid &map, int theta_cell_num,
+void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta)
 {
@@ -32,14 +32,15 @@ void ValueIterator::setMapWithOccupancyGrid(nav_msgs::OccupancyGrid &map, int th
 	map_origin_y_ = map.info.origin.position.y;
 	map_origin_quat_ = map.info.origin.orientation;
 
-	ROS_INFO("SET STATES START");
+	//ROS_INFO("SET STATES START");
 	setState(map, safety_radius, safety_radius_penalty);
 	setStateTransition();
 	setSweepOrders();
-	ROS_INFO("SET STATES END");
+	//ROS_INFO("SET STATES END");
 }
 
-void ValueIterator::setMapWithCostGrid(nav_msgs::OccupancyGrid &map, int theta_cell_num,
+#if 0
+void ValueIterator::setMapWithCostGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta)
 {
@@ -86,7 +87,6 @@ bool ValueIterator::finished(std_msgs::msg::UInt32MultiArray &sweep_times, std_m
 	return finish;
 }
 
-#if 0
 void ValueIterator::setStateTransition(void)
 {
 	std::vector<StateTransition> theta_state_transitions;
@@ -114,7 +114,6 @@ void ValueIterator::cellDelta(double x, double y, double t, int &ix, int &iy, in
 	it = (int)floor(t / t_resolution_);
 }
 
-
 void ValueIterator::setStateTransitionWorker(int it)
 {
 	for(auto &a : actions_)
@@ -125,12 +124,13 @@ void ValueIterator::noNoiseStateTransition(Action &a,
 	double from_x, double from_y, double from_t, double &to_x, double &to_y, double &to_t)
 {
 	double ang = from_t / 180 * M_PI;
-	to_x = from_x + a._delta_fw*cos(ang);
-	to_y = from_y + a._delta_fw*sin(ang);
-	to_t = from_t + a._delta_rot;
+	to_x = from_x + a.delta_fw_*cos(ang);
+	to_y = from_y + a.delta_fw_*sin(ang);
+	to_t = from_t + a.delta_rot_;
 	while(to_t < 0.0)
 		to_t += 360.0;
 }
+
 
 void ValueIterator::setStateTransitionWorkerSub(Action &a, int it)
 {
@@ -164,6 +164,8 @@ void ValueIterator::setStateTransitionWorkerSub(Action &a, int it)
 		}
 	}
 }
+
+#if 0
 
 uint64_t ValueIterator::valueIteration(State &s)
 {
@@ -242,7 +244,9 @@ uint64_t ValueIterator::actionCost(State &s, Action &a)
 	return cost >> prob_base_bit_;
 }
 
-void ValueIterator::setState(const nav_msgs::OccupancyGrid &map, double safety_radius, double safety_radius_penalty)
+#endif
+
+void ValueIterator::setState(const nav_msgs::msg::OccupancyGrid &map, double safety_radius, double safety_radius_penalty)
 {
 	states_.clear();
 	int margin = (int)ceil(safety_radius/xy_resolution_);
@@ -252,6 +256,8 @@ void ValueIterator::setState(const nav_msgs::OccupancyGrid &map, double safety_r
 			for(int t=0; t<cell_num_t_; t++)
 				states_.push_back(State(x, y, t, map, margin, safety_radius_penalty, cell_num_x_));
 }
+
+#if 0
 
 void ValueIterator::setStateValues(void)
 {
@@ -348,17 +354,19 @@ void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 	goal_y_ = goal_y;
 	goal_t_ = goal_t;
 
-	ROS_INFO("GOAL: %f, %f, %d", goal_x_, goal_y_, goal_t_);
+	//ROS_INFO("GOAL: %f, %f, %d", goal_x_, goal_y_, goal_t_);
 
 	thread_status_.clear();
 	setStateValues();
 	status_ = "calculating";
 }
 
-void ValueIterator::makeValueFunctionMap(nav_msgs::OccupancyGrid &map, int threshold, 
+#endif
+
+void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, 
 		double x, double y, double yaw_rad)
 {
-	map.header.stamp = ros::Time::now();
+	map.header.stamp = ros_clock_.now();
 	map.header.frame_id = "map";
 	map.info.resolution = xy_resolution_;
 	map.info.width = cell_num_x_;
@@ -380,7 +388,6 @@ void ValueIterator::makeValueFunctionMap(nav_msgs::OccupancyGrid &map, int thres
 			else 
 				map.data.push_back(255);
 		}
-
 }
 
 
@@ -389,7 +396,7 @@ void ValueIterator::setSweepOrders(void)
 	if(sweep_orders_.size())
 		return;
 
-	ROS_INFO("SET SWEEP ORDER");
+	//ROS_INFO("SET SWEEP ORDER");
 	sweep_orders_.push_back( std::vector<int>() );
 	for(int y=0; y<cell_num_y_; y++)
 		for(int x=0; x<cell_num_x_; x++)
@@ -413,6 +420,7 @@ void ValueIterator::setSweepOrders(void)
 			sweep_orders_[i].begin()+half, sweep_orders_[i].end() );
 	}
 }
+#if 0
 
 void ValueIterator::setCancel(void)
 {

@@ -37,9 +37,7 @@ public:
 	ViNode();
 	~ViNode();
 
-	/*
 	void pubValueFunction(void);
-	*/
 	void decision(void);
 private:
 	std::vector<Action> *actions_;

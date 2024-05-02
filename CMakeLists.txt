@@ -20,6 +20,8 @@ ament_auto_add_executable(vi_node
   src/SweepWorkerStatus.cpp
   src/ValueIterator.cpp
   src/ValueIteratorLocal.cpp
+  src/State.cpp
+  src/StateTransition.cpp
   src/vi_node.cpp
 )
 

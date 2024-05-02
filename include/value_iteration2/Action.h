@@ -1,7 +1,7 @@
 #ifndef VALUE_ACTION_
 #define VALUE_ACTION_
 
-//#include "StateTransition.h"
+#include "StateTransition.h"
 #include <vector>
 #include <string>
 
@@ -20,7 +20,7 @@ public:
 //	double _delta_fw_stdev;
 //	double _delta_rot_stdev;
 
-//	std::vector< std::vector<StateTransition> > _state_transitions; //thetaごとに状態遷移先のリストを保存
+	std::vector< std::vector<StateTransition> > _state_transitions; //thetaごとに状態遷移先のリストを保存
 };
 
 }

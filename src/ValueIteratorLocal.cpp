@@ -176,9 +176,11 @@ void ValueIteratorLocal::setLocalWindow(double x, double y)
 	local_iy_max_ = iy + local_ixy_range_ < cell_num_y_ ? iy + local_ixy_range_ : cell_num_y_-1;
 }
 
-void ValueIteratorLocal::makeLocalValueFunctionMap(nav_msgs::OccupancyGrid &map, int threshold,
+*/
+void ValueIteratorLocal::makeLocalValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold,
 		double x, double y, double yaw_rad)
 {
+	/*
 	map.header.stamp = ros::Time::now();
 	map.header.frame_id = "map";
 	map.info.resolution = xy_resolution_;
@@ -201,7 +203,8 @@ void ValueIteratorLocal::makeLocalValueFunctionMap(nav_msgs::OccupancyGrid &map,
 			else 
 				map.data.push_back(255);
 		}
+
+		*/
 }
 
-*/
 }

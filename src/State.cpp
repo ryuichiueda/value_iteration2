@@ -2,11 +2,13 @@
 
 namespace value_iteration2 {
 
-State::State(int x, int y, int theta, const nav_msgs::OccupancyGrid &map,
+State::State(int x, int y, int theta, const nav_msgs::msg::OccupancyGrid &map,
 		int margin, double margin_penalty, int x_num)
 {
+	/*
 	if(margin_penalty > 1.0e+10)
 		ROS_ERROR("TOO LARGE PENALTY TO VIOLATION OF SAFETY RADIUS");
+		*/
 
 	ix_ = x;
 	iy_ = y;
@@ -24,7 +26,7 @@ State::State(int x, int y, int theta, const nav_msgs::OccupancyGrid &map,
 	for(int ix=-margin+x; ix<=margin+x; ix++){
 		for(int iy=-margin+y; iy<=margin+y; iy++){
 			int pos = iy*x_num + ix;
-			if(0 <= pos and pos < map.data.size() and map.data[iy*x_num + ix] != 0)
+			if(0 <= pos and pos < (int)map.data.size() and map.data[iy*x_num + ix] != 0)
 				penalty_ = (uint64_t)(margin_penalty * ValueIterator::prob_base_) + ValueIterator::prob_base_;
 		}
 	}

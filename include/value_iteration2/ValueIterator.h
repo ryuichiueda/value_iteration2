@@ -8,6 +8,8 @@
 #include "State.h"
 #include "SweepWorkerStatus.h"
 #include <map>
+#include <nav_msgs/msg/occupancy_grid.hpp>
+#include "rclcpp/rclcpp.hpp"
 
 /*
 #include "ros/ros.h"
@@ -26,8 +28,8 @@ protected:
 /* value iteration */
 	std::vector<State> states_;
 	std::vector<Action> &actions_;
-	/*
 	std::vector<std::vector<int> > sweep_orders_;
+	/*
 
 	uint64_t valueIteration(State &s);
 	uint64_t actionCost(State &s, Action &a);
@@ -40,9 +42,10 @@ protected:
 	int toIndex(int ix, int iy, int it);
 	/*
 	bool inMapArea(int ix, int iy);
+	*/
 	void cellDelta(double x, double y, double t, int &ix, int &iy, int &it);
 	void noNoiseStateTransition(Action &a, double from_x, double from_y, double from_t, double &to_x, double &to_y, double &to_t);
-	*/
+	rclcpp::Clock ros_clock_;
 /* robot control */
 public: /*
 	bool endOfTrial(void);
@@ -53,31 +56,31 @@ public: /*
 */
 /* initialization */
 	ValueIterator(std::vector<Action> &actions, int thread_num);
-	/*
-	void setMapWithOccupancyGrid(nav_msgs::OccupancyGrid &map, int theta_cell_num,
+	void setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta);
 
-	void setMapWithCostGrid(nav_msgs::OccupancyGrid &map, int theta_cell_num,
+	/*
+	void setMapWithCostGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta);
 protected:
-	void setState(const nav_msgs::OccupancyGrid &map, double safety_radius, double safety_radius_penalty);
+	*/
 	void setStateValues(void);
-	void setStateTransition(void);
 	void setStateTransitionWorker(int it);
 	void setStateTransitionWorkerSub(Action &a, int it);
+	void setState(const nav_msgs::msg::OccupancyGrid &map, double safety_radius, double safety_radius_penalty);
+	void setStateTransition(void);
 	void setSweepOrders(void);
-	*/
 
 /* ros output */
 	/*
 public:
 	bool policyWriter(grid_map_msgs::GetGridMap::Response& response);
 	bool valueFunctionWriter(grid_map_msgs::GetGridMap::Response& response);
-	void makeValueFunctionMap(nav_msgs::OccupancyGrid &map, int threshold,
-			double x, double y, double yaw_rad);
 */
+	void makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold,
+			double x, double y, double yaw_rad);
 /* control of value iteration threads */
 	std::map<int, SweepWorkerStatus> thread_status_; 
 	/*
@@ -97,7 +100,7 @@ protected:
 	int cell_num_x_, cell_num_y_, cell_num_t_;
 	double map_origin_x_;
 	double map_origin_y_;
-	//geometry_msgs::Quaternion map_origin_quat_;
+	geometry_msgs::msg::Quaternion map_origin_quat_;
 	const static unsigned char resolution_xy_bit_ = 6;
 	const static unsigned char resolution_t_bit_ = 6;
 public:

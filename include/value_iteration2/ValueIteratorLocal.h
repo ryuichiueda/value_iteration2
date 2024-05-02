@@ -3,6 +3,7 @@
 
 #include "ValueIterator.h"
 #include "sensor_msgs/msg/laser_scan.hpp"
+#include "nav_msgs/msg/occupancy_grid.hpp"
 
 namespace value_iteration2 {
 
@@ -22,9 +23,9 @@ public:
 	Action *posToAction(double x, double y, double t_rad);
 
 	void setLocalWindow(double x, double y);
-	void makeLocalValueFunctionMap(nav_msgs::OccupancyGrid &map, int threshold, 
-			double x, double y, double yaw_rad);
 */
+	void makeLocalValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, 
+			double x, double y, double yaw_rad);
 private: 
 	/*
 	void localValueIterationLoop(void);

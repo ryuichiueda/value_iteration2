@@ -187,14 +187,14 @@ void ViNode::executeVi(const value_iteration::ViGoalConstPtr &goal)
 }
 
 
+*/
 void ViNode::pubValueFunction(void)
 {
-	nav_msgs::OccupancyGrid map, local_map;
+	nav_msgs::msg::OccupancyGrid map, local_map;
 
 	vi_->makeValueFunctionMap(map, cost_drawing_threshold_, x_, y_, yaw_);
-	pub_value_function_.publish(map);
+	pub_value_function_->publish(map);
 }
-*/
 
 void ViNode::decision(void)
 {
@@ -234,6 +234,14 @@ void ViNode::decision(void)
 	}
 	pub_cmd_vel_.publish(cmd_vel);
 	*/
+
+	static int step = 0;
+
+	if (step%30 == 0) {
+		pubValueFunction();
+	}
+
+	step++;
 }
 
 }
