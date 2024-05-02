@@ -39,7 +39,7 @@ void ViNode::setMap(void)
 	declare_parameter("map_type", "occupancy");
 
 	int theta_cell_num = get_parameter("theta_cell_num").as_int();
-	double safety_radius = get_parameter("safety_radius").as_int();
+	double safety_radius = get_parameter("safety_radius").as_double();
 	double safety_radius_penalty = get_parameter("safety_radius_penalty").as_double();
 	double goal_margin_radius = get_parameter("goal_margin_radius").as_double();
 	int goal_margin_theta = get_parameter("goal_margin_theta").as_int();

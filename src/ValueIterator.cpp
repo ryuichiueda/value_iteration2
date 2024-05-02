@@ -33,11 +33,11 @@ void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, i
 	map_origin_y_ = map.info.origin.position.y;
 	map_origin_quat_ = map.info.origin.orientation;
 
-	//RCLCPP_INFO(node_ptr_->get_logger(),"SET STATES START");
+	RCUTILS_LOG_INFO("SET STATES START");
 	setState(map, safety_radius, safety_radius_penalty);
 	setStateTransition();
 	setSweepOrders();
-	//ROS_INFO("SET STATES END");
+	RCUTILS_LOG_INFO("SET STATES END");
 }
 
 #if 0
