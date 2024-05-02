@@ -28,7 +28,7 @@
 #include <tf/transform_listener.h>
 */
 
-namespace value_iteration2{
+namespace value_iteration2 {
 
 class ViNode : public rclcpp::Node {
 

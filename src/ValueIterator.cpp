@@ -9,7 +9,8 @@
 namespace value_iteration2 {
 
 ValueIterator::ValueIterator(std::vector<Action> &actions, int thread_num)
-	: actions_(actions), status_("init"), goal_x_(0.0), goal_y_(0.0), goal_t_(0), thread_num_(thread_num), ros_clock_(RCL_SYSTEM_TIME)
+	: actions_(actions), status_("init"), goal_x_(0.0), goal_y_(0.0), goal_t_(0), 
+	  thread_num_(thread_num), ros_clock_(RCL_SYSTEM_TIME)
 {
 }
 
@@ -32,7 +33,7 @@ void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, i
 	map_origin_y_ = map.info.origin.position.y;
 	map_origin_quat_ = map.info.origin.orientation;
 
-	//ROS_INFO("SET STATES START");
+	//RCLCPP_INFO(node_ptr_->get_logger(),"SET STATES START");
 	setState(map, safety_radius, safety_radius_penalty);
 	setStateTransition();
 	setSweepOrders();

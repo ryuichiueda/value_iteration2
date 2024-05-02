@@ -31,18 +31,6 @@ ViNode::~ViNode()
 
 void ViNode::setMap(void)
 {
-	auto client = create_client<nav_msgs::srv::GetMap>("/map_server/map");
-
-	std::shared_ptr<nav_msgs::srv::GetMap::Response> res;
-	
-	while (!client->wait_for_service(1s)) {
-		if (!rclcpp::ok()) {
-			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
-			return;
-		}
-		RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
-	}
-
 	declare_parameter("theta_cell_num", 60);
 	declare_parameter("safety_radius", 0.2);
 	declare_parameter("safety_radius_penalty", 30.0);
@@ -58,6 +46,27 @@ void ViNode::setMap(void)
 
 	std::string map_type = get_parameter("map_type").as_string();
 	if(map_type == "occupancy"){
+		auto client = create_client<nav_msgs::srv::GetMap>("/map_server/map");
+	
+		while (!client->wait_for_service(1s)) {
+			if (!rclcpp::ok()) {
+				RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for map.");
+				return;
+			}
+			RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "map server not available, waiting again...");
+		}
+	
+		auto req = std::make_shared<nav_msgs::srv::GetMap::Request>();
+		auto res = client->async_send_request(req);
+		
+		if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), res) == rclcpp::FutureReturnCode::SUCCESS) {
+			vi_->setMapWithOccupancyGrid(res.get()->map, theta_cell_num, safety_radius, safety_radius_penalty,
+				goal_margin_radius, goal_margin_theta);
+		} else {
+			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call map service");
+		}
+
+
 	/*
 		while(!ros::service::waitForService("/static_map", ros::Duration(3.0))){
 			ROS_INFO("Waiting for static_map");
@@ -110,7 +119,7 @@ void ViNode::setCommunication(void)
 	}
 
 	timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
-	pub_value_function_ = create_publisher<nav_msgs::msg::OccupancyGrid>("/value_function", 2);
+	pub_value_function_ = create_publisher<nav_msgs::msg::OccupancyGrid>("value_function", 2);
 	/*
 
 	as_.reset(new actionlib::SimpleActionServer<value_iteration::ViAction>( nh_, "vi_controller",

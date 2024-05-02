@@ -4,7 +4,8 @@
 
 namespace value_iteration2 {
 
-ValueIteratorLocal::ValueIteratorLocal(std::vector<Action> &actions, int thread_num) : ValueIterator(actions, thread_num)
+ValueIteratorLocal::ValueIteratorLocal(std::vector<Action> &actions, int thread_num) 
+	: ValueIterator(actions, thread_num)
 {
 	local_ix_min_ = local_ix_max_ = local_iy_min_ = local_iy_max_ = 0;
 }

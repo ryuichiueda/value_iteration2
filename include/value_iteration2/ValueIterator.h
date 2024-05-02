@@ -23,7 +23,7 @@
 
 namespace value_iteration2 {
 
-class ValueIterator{
+class ValueIterator {
 protected: 
 /* value iteration */
 	std::vector<State> states_;
