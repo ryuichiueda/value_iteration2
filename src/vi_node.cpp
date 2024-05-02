@@ -31,7 +31,17 @@ ViNode::~ViNode()
 
 void ViNode::setMap(void)
 {
+	auto client = create_client<nav_msgs::srv::GetMap>("/map_server/map");
+
 	std::shared_ptr<nav_msgs::srv::GetMap::Response> res;
+	
+	while (!client->wait_for_service(1s)) {
+		if (!rclcpp::ok()) {
+			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
+			return;
+		}
+		RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
+	}
 
 	declare_parameter("theta_cell_num", 60);
 	declare_parameter("safety_radius", 0.2);
