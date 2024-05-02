@@ -18,18 +18,11 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
 	setCommunication();
-
-	/*
-
-
-	nav_msgs::GetMap::Response res;
-	setMap(res);
-	*/
 }
 
 ViNode::~ViNode() 
 {
-	//delete actions_;
+	delete actions_;
 }
 
 /*
@@ -94,7 +87,7 @@ void ViNode::setCommunication(void)
 	RCLCPP_INFO(this->get_logger(),"Online: %s", online_ ? "true" : "false");
 
 	if(online_){
-		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
+		pub_cmd_vel_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 1);
 		timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
 
 		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("/scan", 1,
@@ -205,7 +198,14 @@ void ViNode::pubValueFunction(void)
 
 void ViNode::decision(void)
 {
-	RCLCPP_INFO(this->get_logger(),"HELL");
+	/*
+	geometry_msgs::msg::Twist cmd_vel;
+	cmd_vel.linear.x = 0.00;
+	cmd_vel.angular.z = 0.0;
+	RCLCPP_INFO(this->get_logger(),"pub");
+
+	pub_cmd_vel_->publish(cmd_vel);
+	*/
 	/*
 	if(not online_)
 		return; 
