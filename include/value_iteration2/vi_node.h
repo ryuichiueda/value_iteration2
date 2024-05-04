@@ -11,7 +11,8 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
-#include <grid_map_msgs/srv/get_grid_map.h>
+#include "nav2_util/simple_action_server.hpp"
+#include "nav2_msgs/action/compute_path_to_pose.hpp"
 
 /*
 #include <ros/ros.h>
@@ -37,12 +38,16 @@ public:
 	ViNode();
 	~ViNode();
 
+	void init(void);
 	void pubValueFunction(void);
 	void decision(void);
+
 private:
 	std::vector<Action> *actions_;
 	std::shared_ptr<ValueIteratorLocal> vi_;
 	rclcpp::TimerBase::SharedPtr timer_;
+
+	std::unique_ptr<nav2_util::SimpleActionServer<nav2_msgs::action::ComputePathToPose>> as_;
 	/*
 	ros::NodeHandle nh_;
 	ros::NodeHandle private_nh_;
@@ -54,9 +59,10 @@ private:
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_cmd_vel_;
 	rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr pub_value_function_;
 	rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_laser_scan_;
+	rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr sub_goal_;
 
+	void executeVi(void);
 	/*
-	void executeVi(const value_iteration::ViGoalConstPtr &goal);
 	tf::TransformListener tf_listener_;
 
 	shared_ptr<actionlib::SimpleActionServer<value_iteration::ViAction> > as_;
@@ -66,6 +72,7 @@ private:
 
 	*/
 	void scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg);
+	void goalReceived(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg);
 
 	void setActions(void);
 	void setCommunication(void);

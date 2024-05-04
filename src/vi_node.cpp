@@ -16,11 +16,12 @@ ViNode::ViNode() : Node("vi_node")// : private_nh_("~"), yaw_(0.0), x_(0.0), y_(
 	int thread_num = get_parameter("global_thread_num").as_int();
 	RCLCPP_INFO(this->get_logger(),"Global thread num: %d", thread_num);
 	cost_drawing_threshold_ = get_parameter("cost_drawing_threshold").as_int();
-
 	vi_.reset(new ValueIteratorLocal(*actions_, thread_num));
-	setCommunication();
+}
 
-	//nav_msgs::GetMap::Response res;
+void ViNode::init(void)
+{
+	setCommunication();
         setMap();
 }
 
@@ -116,18 +117,27 @@ void ViNode::setCommunication(void)
 		sub_laser_scan_ = create_subscription<sensor_msgs::msg::LaserScan>("/scan", 1,
 				std::bind(&ViNode::scanReceived, this, std::placeholders::_1));
 		RCLCPP_INFO(this->get_logger(),"set scan");
+		sub_goal_ = create_subscription<geometry_msgs::msg::PoseStamped>("/goal_pose", 1,
+				std::bind(&ViNode::goalReceived, this, std::placeholders::_1));
 	}
 
 	timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
 	pub_value_function_ = create_publisher<nav_msgs::msg::OccupancyGrid>("value_function", 2);
-	/*
 
-	as_.reset(new actionlib::SimpleActionServer<value_iteration::ViAction>( nh_, "vi_controller",
-				boost::bind(&ViNode::executeVi, this, _1), false));
+#if 0
 	as_->start();
 	srv_policy_ = nh_.advertiseService("/policy", &ViNode::servePolicy, this);
 	srv_value_ = nh_.advertiseService("/value", &ViNode::serveValue, this);
-*/
+#endif 
+
+	rcl_action_server_options_t server_options = rcl_action_server_get_default_options();
+	as_ = std::make_unique<nav2_util::SimpleActionServer<nav2_msgs::action::ComputePathToPose>>(
+			shared_from_this(),
+			"/compute_path_to_pose",
+			std::bind(&ViNode::executeVi, this),
+			nullptr,
+			std::chrono::milliseconds(500),
+			true, server_options);
 }
 
 void ViNode::setActions(void)
@@ -147,6 +157,11 @@ void ViNode::scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg)
 	vi_->setLocalCost(msg, x_, y_, yaw_);
 }
 
+void ViNode::goalReceived(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg) 
+{
+	RCLCPP_INFO(this->get_logger(), "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+}
+
 /*
 bool ViNode::servePolicy(grid_map_msgs::GetGridMap::Request& request, grid_map_msgs::GetGridMap::Response& response)
 {
@@ -160,8 +175,20 @@ bool ViNode::serveValue(grid_map_msgs::GetGridMap::Request& request, grid_map_ms
 	return true;
 }
 
-void ViNode::executeVi(const value_iteration::ViGoalConstPtr &goal)
+*/
+void ViNode::executeVi(void)
 {
+	RCLCPP_INFO(this->get_logger(),"COME HERE!!!!!!!!!!!!");
+       	auto goal = as_->get_current_goal();
+	auto result = std::make_shared<nav2_msgs::action::ComputePathToPose::Result>();
+	geometry_msgs::msg::PoseStamped start;
+
+	if (goal->use_start) {
+		start = goal->start;
+	}
+
+	RCLCPP_INFO(this->get_logger(),"COME HERE!!!!!!!!!!!!");
+	/*
 	static bool executing = true;
 	ROS_INFO("VALUE ITERATION START");
 	auto &ori = goal->goal.pose.orientation;	
@@ -208,8 +235,8 @@ void ViNode::executeVi(const value_iteration::ViGoalConstPtr &goal)
 	value_iteration::ViResult vi_result;
 	vi_result.finished = vi_->arrived();
 	as_->setSucceeded(vi_result);
-}
 */
+}
 
 void ViNode::pubValueFunction(void)
 {
@@ -276,6 +303,7 @@ int main(int argc, char **argv)
 //	int step = 0;
 
 	rclcpp::WallRate loop(10);
+	node->init();
 	rclcpp::spin(node);
 	/*
 	while (rclcpp::ok()) {

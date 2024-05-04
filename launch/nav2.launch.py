@@ -17,31 +17,15 @@ def generate_launch_description():
       'params.yaml'
     )
 
-    vi_node = Node(
-            package='value_iteration2',
-            namespace='value_iteration2',
-            executable='vi_node',
-            name='vi_node',
-            parameters=[config],
-        )
-
     emcl2_launch = IncludeLaunchDescription(
         XMLLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory("emcl2"),
-                emcl2_share_dir + "/test/nonavigation.launch.xml",
+                emcl2_share_dir + "/test/test.launch.xml",
             )
         )
     )
 
-    rviz = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        arguments=['-d', './config/config.rviz'])
-
     return launch.LaunchDescription([
         emcl2_launch,
-        vi_node,
-        rviz,
     ])
