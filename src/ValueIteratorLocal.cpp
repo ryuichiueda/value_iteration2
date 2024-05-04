@@ -25,11 +25,10 @@ void ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &m
 	local_iy_max_ = local_ixy_range_*2;
 }
 
-	/*
-void ValueIteratorLocal::localValueIterationWorker(int id)
+void ValueIteratorLocal::localValueIterationWorker(void)
 {
 	while(status_ == "canceled" or status_ == "goal"){
-		ROS_INFO("STATUS PROBLEM: %s", status_.c_str());
+		RCUTILS_LOG_INFO("STATUS PROBLEM: %s", status_.c_str());
 		status_ = "executing";
 	}
 
@@ -58,7 +57,7 @@ uint64_t ValueIteratorLocal::valueIterationLocal(State &s)
 	uint64_t min_cost = ValueIterator::max_cost_;
 	Action *min_action = NULL;
 	for(auto &a : actions_){
-		int64_t c = actionCostLocal(s, a);
+		uint64_t c = actionCostLocal(s, a);
 		if(c < min_cost){
 			min_cost = c;
 			min_action = &a;
@@ -85,14 +84,13 @@ Action *ValueIteratorLocal::posToAction(double x, double y, double t_rad)
 		status_ = "goal";
 		return NULL;
 	}else if(states_[index].optimal_action_ != NULL){
-		ROS_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);
+		RCUTILS_LOG_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);
 		return states_[index].optimal_action_;
 	}
 
 	return NULL;
 
 }
-*/
 
 bool ValueIteratorLocal::inLocalArea(int ix, int iy)
 {
@@ -141,7 +139,6 @@ void ValueIteratorLocal::setLocalCost(const sensor_msgs::msg::LaserScan::ConstSh
 	}
 }
 
-/*
 uint64_t ValueIteratorLocal::actionCostLocal(State &s, Action &a)
 {
 	uint64_t cost = 0;
@@ -166,6 +163,7 @@ uint64_t ValueIteratorLocal::actionCostLocal(State &s, Action &a)
 	return cost >> prob_base_bit_;
 }
 
+/*
 void ValueIteratorLocal::setLocalWindow(double x, double y)
 {
         int ix = (int)floor( (x - map_origin_x_)/xy_resolution_ );
