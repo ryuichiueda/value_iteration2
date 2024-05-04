@@ -43,9 +43,10 @@ protected:
 	void noNoiseStateTransition(Action &a, double from_x, double from_y, double from_t, double &to_x, double &to_y, double &to_t);
 	rclcpp::Clock ros_clock_;
 /* robot control */
-public: /*
+public: 
 	bool endOfTrial(void);
 	bool arrived(void);
+	/*
 	Action *posToAction(double x, double y, double t_rad);
 	void setCalculated(void);
 	bool isCalculated(void);
@@ -78,9 +79,7 @@ public:
 	void makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, double yaw_rad);
 /* control of value iteration threads */
 	std::map<int, SweepWorkerStatus> thread_status_; 
-	/*
 	void setCancel(void);
-	*/
 	bool finished(std_msgs::msg::UInt32MultiArray &sweep_times, std_msgs::msg::Float32MultiArray &deltas);
 protected:
 	std::string status_;

@@ -414,7 +414,6 @@ void ValueIterator::setSweepOrders(void)
 			sweep_orders_[i].begin()+half, sweep_orders_[i].end() );
 	}
 }
-#if 0
 
 void ValueIterator::setCancel(void)
 {
@@ -431,6 +430,7 @@ bool ValueIterator::arrived(void)
 	return status_ == "goal";
 }
 
+#if 0
 Action *ValueIterator::posToAction(double x, double y, double t_rad)
 {
         int ix = (int)floor( (x - map_origin_x_)/xy_resolution_ );
