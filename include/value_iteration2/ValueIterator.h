@@ -55,12 +55,10 @@ public:
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta);
 
-	/*
 	void setMapWithCostGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
-		double safety_radius, double safety_radius_penalty,
+		/*double safety_radius, double safety_radius_penalty,*/
 		double goal_margin_radius, int goal_margin_theta);
 protected:
-	*/
 	void setStateValues(void);
 	void setStateTransitionWorker(int it);
 	void setStateTransitionWorkerSub(Action &a, int it);
@@ -69,8 +67,8 @@ protected:
 	void setSweepOrders(void);
 
 /* ros output */
-	/*
 public:
+	/*
 	bool policyWriter(grid_map_msgs::GetGridMap::Response& response);
 	bool valueFunctionWriter(grid_map_msgs::GetGridMap::Response& response);
 */

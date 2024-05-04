@@ -40,9 +40,8 @@ void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, i
 	RCUTILS_LOG_INFO("SET STATES END");
 }
 
-#if 0
 void ValueIterator::setMapWithCostGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
-		double safety_radius, double safety_radius_penalty,
+		/*double safety_radius, double safety_radius_penalty,*/
 		double goal_margin_radius, int goal_margin_theta)
 {
 	cell_num_t_ = theta_cell_num;
@@ -60,7 +59,7 @@ void ValueIterator::setMapWithCostGrid(nav_msgs::msg::OccupancyGrid &map, int th
 	map_origin_quat_ = map.info.origin.orientation;
 
 	states_.clear();
-	int margin = (int)ceil(safety_radius/xy_resolution_);
+	//int margin = (int)ceil(safety_radius/xy_resolution_);
 
 	for(int y=0; y<cell_num_y_; y++)
 		for(int x=0; x<cell_num_x_; x++){
@@ -72,7 +71,6 @@ void ValueIterator::setMapWithCostGrid(nav_msgs::msg::OccupancyGrid &map, int th
 	setStateTransition();
 	setSweepOrders();
 }
-#endif
 
 bool ValueIterator::finished(std_msgs::msg::UInt32MultiArray &sweep_times, std_msgs::msg::Float32MultiArray &deltas)
 { 
