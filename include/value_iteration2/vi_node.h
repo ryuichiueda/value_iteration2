@@ -9,10 +9,9 @@
 #include <value_iteration2/Action.h>
 #include "value_iteration2/ValueIteratorLocal.h"
 #include "geometry_msgs/msg/twist.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
-#include "nav2_util/simple_action_server.hpp"
-#include "nav2_msgs/action/compute_path_to_pose.hpp"
 
 /*
 #include <ros/ros.h>
@@ -47,7 +46,6 @@ private:
 	std::shared_ptr<ValueIteratorLocal> vi_;
 	rclcpp::TimerBase::SharedPtr timer_;
 
-	std::unique_ptr<nav2_util::SimpleActionServer<nav2_msgs::action::ComputePathToPose>> as_;
 	/*
 	ros::NodeHandle nh_;
 	ros::NodeHandle private_nh_;

@@ -129,15 +129,6 @@ void ViNode::setCommunication(void)
 	srv_policy_ = nh_.advertiseService("/policy", &ViNode::servePolicy, this);
 	srv_value_ = nh_.advertiseService("/value", &ViNode::serveValue, this);
 #endif 
-
-	rcl_action_server_options_t server_options = rcl_action_server_get_default_options();
-	as_ = std::make_unique<nav2_util::SimpleActionServer<nav2_msgs::action::ComputePathToPose>>(
-			shared_from_this(),
-			"/compute_path_to_pose",
-			std::bind(&ViNode::executeVi, this),
-			nullptr,
-			std::chrono::milliseconds(500),
-			true, server_options);
 }
 
 void ViNode::setActions(void)
@@ -178,16 +169,6 @@ bool ViNode::serveValue(grid_map_msgs::GetGridMap::Request& request, grid_map_ms
 */
 void ViNode::executeVi(void)
 {
-	RCLCPP_INFO(this->get_logger(),"COME HERE!!!!!!!!!!!!");
-       	auto goal = as_->get_current_goal();
-	auto result = std::make_shared<nav2_msgs::action::ComputePathToPose::Result>();
-	geometry_msgs::msg::PoseStamped start;
-
-	if (goal->use_start) {
-		start = goal->start;
-	}
-
-	RCLCPP_INFO(this->get_logger(),"COME HERE!!!!!!!!!!!!");
 	/*
 	static bool executing = true;
 	ROS_INFO("VALUE ITERATION START");

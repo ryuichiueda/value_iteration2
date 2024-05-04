@@ -10,6 +10,7 @@ from launch.actions import IncludeLaunchDescription
 
 def generate_launch_description():
     emcl2_share_dir = get_package_share_directory("emcl2")
+    vi_share_dir = get_package_share_directory("value_iteration2")
 
     config = os.path.join(
       get_package_share_directory('value_iteration2'),
@@ -38,7 +39,7 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         name='rviz2',
-        arguments=['-d', './config/config.rviz'])
+        arguments=['-d', vi_share_dir + '/config/config.rviz'])
 
     return launch.LaunchDescription([
         emcl2_launch,
