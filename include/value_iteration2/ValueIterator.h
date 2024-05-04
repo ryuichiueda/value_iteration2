@@ -29,20 +29,18 @@ protected:
 	std::vector<State> states_;
 	std::vector<Action> &actions_;
 	std::vector<std::vector<int> > sweep_orders_;
-	/*
-
 	uint64_t valueIteration(State &s);
+
 	uint64_t actionCost(State &s, Action &a);
+	/*
 public:
 	void setGoal(double goal_x, double goal_y, int goal_t);
-	void valueIterationWorker(int times, int id);
 */
+	void valueIterationWorker(int times, int id);
 /* calculation */
 protected: 
 	int toIndex(int ix, int iy, int it);
-	/*
 	bool inMapArea(int ix, int iy);
-	*/
 	void cellDelta(double x, double y, double t, int &ix, int &iy, int &it);
 	void noNoiseStateTransition(Action &a, double from_x, double from_y, double from_t, double &to_x, double &to_y, double &to_t);
 	rclcpp::Clock ros_clock_;

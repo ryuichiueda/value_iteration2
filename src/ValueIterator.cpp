@@ -166,8 +166,6 @@ void ValueIterator::setStateTransitionWorkerSub(Action &a, int it)
 	}
 }
 
-#if 0
-
 uint64_t ValueIterator::valueIteration(State &s)
 {
 	if((not s.free_) or s.final_state_)
@@ -176,7 +174,8 @@ uint64_t ValueIterator::valueIteration(State &s)
 	uint64_t min_cost = ValueIterator::max_cost_;
 	Action *min_action = NULL;
 	for(auto &a : actions_){
-		int64_t c = actionCost(s, a);
+		uint64_t c = actionCost(s, a);
+		//int64_t c = actionCost(s, a);
 		if(c < min_cost){
 			min_cost = c;
 			min_action = &a;
@@ -208,14 +207,12 @@ void ValueIterator::valueIterationWorker(int times, int id)
 
 	thread_status_[id]._finished = true;
 }
-#endif
 
 int ValueIterator::toIndex(int ix, int iy, int it)
 {
 	return it + ix*cell_num_t_ + iy*(cell_num_t_*cell_num_x_);
 }
 
-#if 0
 bool ValueIterator::inMapArea(int ix, int iy)
 {
 	return ix >= 0 and ix < cell_num_x_ and iy >= 0 and iy < cell_num_y_;
@@ -244,8 +241,6 @@ uint64_t ValueIterator::actionCost(State &s, Action &a)
 
 	return cost >> prob_base_bit_;
 }
-
-#endif
 
 void ValueIterator::setState(const nav_msgs::msg::OccupancyGrid &map, double safety_radius, double safety_radius_penalty)
 {
