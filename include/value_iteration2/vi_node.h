@@ -11,6 +11,7 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
+#include <grid_map_msgs/srv/get_grid_map.h>
 
 /*
 #include <ros/ros.h>
@@ -53,12 +54,13 @@ private:
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_cmd_vel_;
 	rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr pub_value_function_;
 	rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_laser_scan_;
+
 	/*
+	void executeVi(const value_iteration::ViGoalConstPtr &goal);
 	tf::TransformListener tf_listener_;
 
 	shared_ptr<actionlib::SimpleActionServer<value_iteration::ViAction> > as_;
 
-	void executeVi(const value_iteration::ViGoalConstPtr &goal);
 	bool servePolicy(grid_map_msgs::GetGridMap::Request& request, grid_map_msgs::GetGridMap::Response& response);
 	bool serveValue(grid_map_msgs::GetGridMap::Request& request, grid_map_msgs::GetGridMap::Response& response);
 

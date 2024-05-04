@@ -10,6 +10,7 @@
 #include <map>
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include "rclcpp/rclcpp.hpp"
+#include <grid_map_msgs/srv/get_grid_map.hpp>
 
 /*
 #include "ros/ros.h"
@@ -69,9 +70,9 @@ protected:
 /* ros output */
 public:
 	/*
-	bool policyWriter(grid_map_msgs::GetGridMap::Response& response);
-	bool valueFunctionWriter(grid_map_msgs::GetGridMap::Response& response);
-*/
+	bool policyWriter(grid_map_msgs::srv::GetGridMap::Response& response);
+	bool valueFunctionWriter(grid_map_msgs::srv::GetGridMap::Response& response);
+	*/
 	void makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, double yaw_rad);
 /* control of value iteration threads */
 	std::map<int, SweepWorkerStatus> thread_status_; 

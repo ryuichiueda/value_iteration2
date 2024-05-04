@@ -209,9 +209,8 @@ void ViNode::executeVi(const value_iteration::ViGoalConstPtr &goal)
 	vi_result.finished = vi_->arrived();
 	as_->setSucceeded(vi_result);
 }
-
-
 */
+
 void ViNode::pubValueFunction(void)
 {
 	nav_msgs::msg::OccupancyGrid map, local_map;

@@ -1,9 +1,9 @@
 #include "value_iteration2/ValueIterator.h"
 #include "rclcpp/rclcpp.hpp"
+#include <grid_map_ros/grid_map_ros.hpp>
+#include <grid_map_msgs/msg/grid_map.hpp>
 /*
 #include <thread>
-#include <grid_map_ros/grid_map_ros.hpp>
-#include <grid_map_msgs/GridMap.h>
 */
 
 namespace value_iteration2 {
@@ -289,7 +289,7 @@ void ValueIterator::setStateValues(void)
 }
 
 #if 0
-bool ValueIterator::valueFunctionWriter(grid_map_msgs::GetGridMap::Response& response)
+bool ValueIterator::valueFunctionWriter(grid_map_msgs::srv::GetGridMap::Response& response)
 {
 	grid_map::GridMap map;
 	map.setFrameId("map");
@@ -299,20 +299,20 @@ bool ValueIterator::valueFunctionWriter(grid_map_msgs::GetGridMap::Response& res
 		std::string name = to_string(t);
 
 		map.add(name);
-		for(int i=t; i<states_.size(); i+=cell_num_t_){
+		for(unsigned int i=t; i<states_.size(); i+=cell_num_t_){
 			auto &s = states_[i];
 			map.at(name, grid_map::Index(s.ix_, s.iy_)) = s.total_cost_/(ValueIterator::prob_base_);
 		}
 	}
 
-	grid_map_msgs::GridMap message;
-	grid_map::GridMapRosConverter::toMessage(map, message);
+	grid_map_msgs::msg::GridMap message;
+	grid_map::GridMapRosConverter::toMessage(map, &message);
 	response.map = message;
 
 	return true;
 }
 
-bool ValueIterator::policyWriter(grid_map_msgs::GetGridMap::Response& response)
+bool ValueIterator::policyWriter(grid_map_msgs::srv::GetGridMap::Response& response)
 {
 	grid_map::GridMap map;
 	map.setFrameId("map");
@@ -329,14 +329,17 @@ bool ValueIterator::policyWriter(grid_map_msgs::GetGridMap::Response& response)
 		}
 	}
 
-	grid_map_msgs::GridMap message;
+	grid_map_msgs::msg::GridMap message;
+	/*
 	grid_map::GridMapRosConverter::toMessage(map, message);
+	*/
+	message = grid_map::GridMapRosConverter::toMessage(map);
 	response.map = message;
 
 	return true;
 }
 
-#endif 
+#endif
 
 void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 {
