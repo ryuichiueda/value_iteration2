@@ -20,10 +20,7 @@ public:
 		double goal_margin_radius, int goal_margin_theta);
 
 	Action *posToAction(double x, double y, double t_rad);
-	/*
-
 	void setLocalWindow(double x, double y);
-*/
 	void makeLocalValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, 
 			double x, double y, double yaw_rad);
 private: 

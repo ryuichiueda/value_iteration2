@@ -163,7 +163,6 @@ uint64_t ValueIteratorLocal::actionCostLocal(State &s, Action &a)
 	return cost >> prob_base_bit_;
 }
 
-/*
 void ValueIteratorLocal::setLocalWindow(double x, double y)
 {
         int ix = (int)floor( (x - map_origin_x_)/xy_resolution_ );
@@ -175,7 +174,6 @@ void ValueIteratorLocal::setLocalWindow(double x, double y)
 	local_iy_max_ = iy + local_ixy_range_ < cell_num_y_ ? iy + local_ixy_range_ : cell_num_y_-1;
 }
 
-*/
 void ValueIteratorLocal::makeLocalValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold,
 		double x, double y, double yaw_rad)
 {
