@@ -32,10 +32,8 @@ protected:
 	uint64_t valueIteration(State &s);
 
 	uint64_t actionCost(State &s, Action &a);
-	/*
 public:
 	void setGoal(double goal_x, double goal_y, int goal_t);
-*/
 	void valueIterationWorker(int times, int id);
 /* calculation */
 protected: 

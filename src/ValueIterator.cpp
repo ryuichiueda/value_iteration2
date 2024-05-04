@@ -253,7 +253,6 @@ void ValueIterator::setState(const nav_msgs::msg::OccupancyGrid &map, double saf
 				states_.push_back(State(x, y, t, map, margin, safety_radius_penalty, cell_num_x_));
 }
 
-#if 0
 
 void ValueIterator::setStateValues(void)
 {
@@ -291,6 +290,7 @@ void ValueIterator::setStateValues(void)
 	}
 }
 
+#if 0
 bool ValueIterator::valueFunctionWriter(grid_map_msgs::GetGridMap::Response& response)
 {
 	grid_map::GridMap map;
@@ -338,6 +338,7 @@ bool ValueIterator::policyWriter(grid_map_msgs::GetGridMap::Response& response)
 	return true;
 }
 
+#endif 
 
 void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 {
@@ -356,8 +357,6 @@ void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 	setStateValues();
 	status_ = "calculating";
 }
-
-#endif
 
 void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, double yaw_rad)
 {
