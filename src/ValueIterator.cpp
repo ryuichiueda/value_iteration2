@@ -351,7 +351,7 @@ void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 	goal_y_ = goal_y;
 	goal_t_ = goal_t;
 
-	//ROS_INFO("GOAL: %f, %f, %d", goal_x_, goal_y_, goal_t_);
+	//RCUTILS_LOG_INFO("GOAL: %f, %f, %d", goal_x_, goal_y_, goal_t_);
 
 	thread_status_.clear();
 	setStateValues();
@@ -390,7 +390,7 @@ void ValueIterator::setSweepOrders(void)
 	if(sweep_orders_.size())
 		return;
 
-	//ROS_INFO("SET SWEEP ORDER");
+	//RCUTILS_LOG_INFO("SET SWEEP ORDER");
 	sweep_orders_.push_back( std::vector<int>() );
 	for(int y=0; y<cell_num_y_; y++)
 		for(int x=0; x<cell_num_x_; x++)
@@ -430,7 +430,6 @@ bool ValueIterator::arrived(void)
 	return status_ == "goal";
 }
 
-#if 0
 Action *ValueIterator::posToAction(double x, double y, double t_rad)
 {
         int ix = (int)floor( (x - map_origin_x_)/xy_resolution_ );
@@ -444,7 +443,7 @@ Action *ValueIterator::posToAction(double x, double y, double t_rad)
 		status_ = "goal";
 		return NULL;
 	}else if(states_[index].optimal_action_ != NULL){
-		ROS_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);
+		RCUTILS_LOG_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);
 		return states_[index].optimal_action_;
 	}
 
@@ -462,6 +461,5 @@ bool ValueIterator::isCalculated(void)
 {
 	return status_ == "calculated";
 }
-#endif
 }
 

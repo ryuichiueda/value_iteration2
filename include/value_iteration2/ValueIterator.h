@@ -46,11 +46,9 @@ protected:
 public: 
 	bool endOfTrial(void);
 	bool arrived(void);
-	/*
 	Action *posToAction(double x, double y, double t_rad);
 	void setCalculated(void);
 	bool isCalculated(void);
-*/
 /* initialization */
 	ValueIterator(std::vector<Action> &actions, int thread_num);
 	void setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
