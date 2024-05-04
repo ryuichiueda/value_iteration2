@@ -9,8 +9,8 @@
 namespace value_iteration2 {
 
 ValueIterator::ValueIterator(std::vector<Action> &actions, int thread_num)
-	: actions_(actions), status_("init"), goal_x_(0.0), goal_y_(0.0), goal_t_(0), 
-	  thread_num_(thread_num), ros_clock_(RCL_SYSTEM_TIME)
+	: actions_(actions), ros_clock_(RCL_SYSTEM_TIME), status_("init"),
+	goal_x_(0.0), goal_y_(0.0), goal_t_(0), thread_num_(thread_num)
 {
 }
 
@@ -364,8 +364,7 @@ void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 
 #endif
 
-void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, 
-		double x, double y, double yaw_rad)
+void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, double yaw_rad)
 {
 	map.header.stamp = ros_clock_.now();
 	map.header.frame_id = "map";
@@ -383,11 +382,11 @@ void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int 
 			int index = toIndex(x, y, it);
 			double cost = (double)states_[index].total_cost_/prob_base_;
 			if(cost < (double)threshold)
-				map.data.push_back((int)(cost/threshold*250));
+				map.data.push_back((int)(cost/threshold*250/2));
 			else if(states_[index].free_)
-				map.data.push_back(250);
+				map.data.push_back(250/2);
 			else 
-				map.data.push_back(255);
+				map.data.push_back(255/2);
 		}
 }
 

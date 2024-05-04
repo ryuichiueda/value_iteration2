@@ -79,8 +79,7 @@ public:
 	bool policyWriter(grid_map_msgs::GetGridMap::Response& response);
 	bool valueFunctionWriter(grid_map_msgs::GetGridMap::Response& response);
 */
-	void makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold,
-			double x, double y, double yaw_rad);
+	void makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, double yaw_rad);
 /* control of value iteration threads */
 	std::map<int, SweepWorkerStatus> thread_status_; 
 	/*

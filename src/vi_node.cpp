@@ -216,7 +216,7 @@ void ViNode::pubValueFunction(void)
 {
 	nav_msgs::msg::OccupancyGrid map, local_map;
 
-	vi_->makeValueFunctionMap(map, cost_drawing_threshold_, x_, y_, yaw_);
+	vi_->makeValueFunctionMap(map, cost_drawing_threshold_, yaw_);
 	pub_value_function_->publish(map);
 }
 

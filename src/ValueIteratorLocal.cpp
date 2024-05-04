@@ -10,8 +10,7 @@ ValueIteratorLocal::ValueIteratorLocal(std::vector<Action> &actions, int thread_
 	local_ix_min_ = local_ix_max_ = local_iy_min_ = local_iy_max_ = 0;
 }
 
-	/*
-void ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::OccupancyGrid &map, int theta_cell_num,
+void ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta)
 {
@@ -26,6 +25,7 @@ void ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::OccupancyGrid &map, i
 	local_iy_max_ = local_ixy_range_*2;
 }
 
+	/*
 void ValueIteratorLocal::localValueIterationWorker(int id)
 {
 	while(status_ == "canceled" or status_ == "goal"){
@@ -181,8 +181,8 @@ void ValueIteratorLocal::setLocalWindow(double x, double y)
 void ValueIteratorLocal::makeLocalValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold,
 		double x, double y, double yaw_rad)
 {
-	/*
-	map.header.stamp = ros::Time::now();
+	map.header.stamp = ros_clock_.now();
+	//map.header.stamp = ros::Time::now();
 	map.header.frame_id = "map";
 	map.info.resolution = xy_resolution_;
 	map.info.width = local_ixy_range_*2 + 1;
@@ -198,14 +198,12 @@ void ValueIteratorLocal::makeLocalValueFunctionMap(nav_msgs::msg::OccupancyGrid 
 			int index = toIndex(x, y, it);
 			double cost = (double)states_[index].total_cost_/prob_base_;
 			if(cost < (double)threshold)
-				map.data.push_back((int)(cost/threshold*250));
+				map.data.push_back((int)(cost/threshold*250/2));
 			else if(states_[index].free_)
-				map.data.push_back(250);
+				map.data.push_back(250/2);
 			else 
-				map.data.push_back(255);
+				map.data.push_back(255/2);
 		}
-
-		*/
 }
 
 }
