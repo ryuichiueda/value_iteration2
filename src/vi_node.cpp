@@ -50,8 +50,9 @@ void ViNode::setMap(void)
 
 	std::string map_type = get_parameter("map_type").as_string();
 	if(map_type == "occupancy"){
-		auto client = create_client<nav_msgs::srv::GetMap>("/map_server/map");
 	
+			sleep(10);
+		auto client = create_client<nav_msgs::srv::GetMap>("/map_server/map");
 		while (!client->wait_for_service(1s)) {
 			if (!rclcpp::ok()) {
 				RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for map.");
@@ -124,8 +125,10 @@ void ViNode::setCommunication(void)
 				std::bind(&ViNode::goalReceived, this, std::placeholders::_1));
 	}
 
-	timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
-	pub_value_function_ = create_publisher<nav_msgs::msg::OccupancyGrid>("value_function", 2);
+	pub_value_function_ = create_publisher<nav_msgs::msg::OccupancyGrid>("/value_function", 2);
+
+	decision_timer_ = this->create_wall_timer(100ms, std::bind(&ViNode::decision, this));
+	value_pub_timer_ = this->create_wall_timer(1500ms, std::bind(&ViNode::pubValueFunction, this));
 
 #if 0
 	as_->start();
@@ -178,14 +181,18 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 	double roll, pitch, yaw;
 	tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
 	int t = (int)(yaw*180/M_PI);
+	RCLCPP_INFO(get_logger(), "GOAL: %lf %lf %d", msg->pose.position.x, msg->pose.position.y, t);
 	vi_->setGoal(msg->pose.position.x, msg->pose.position.y, t);
+	RCLCPP_INFO(get_logger(), "SET");
 
 	vector<thread> ths;
 	for(int t=0; t<vi_->thread_num_; t++)
 		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
 
+	RCLCPP_INFO(get_logger(), "OK");
 	if(online_)
 		thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get()).detach();
+	RCLCPP_INFO(get_logger(), "OK2");
 
 	/*
 	value_iteration2::ViFeedback vi_feedback;
@@ -204,6 +211,7 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 
 	for(auto &th : ths)
 		th.join();
+	RCLCPP_INFO(get_logger(), "JOINED");
 
 	/*
 	while(not vi_->endOfTrial() )
@@ -223,6 +231,7 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 
 void ViNode::pubValueFunction(void)
 {
+	RCLCPP_INFO(get_logger(), "PUBLISH VALUE FUNC");
 	nav_msgs::msg::OccupancyGrid map, local_map;
 
 	vi_->makeValueFunctionMap(map, cost_drawing_threshold_, yaw_);
@@ -268,6 +277,7 @@ void ViNode::decision(void)
 	pub_cmd_vel_.publish(cmd_vel);
 	*/
 
+	/*
 	static int step = 0;
 
 	if (step%30 == 0) {
@@ -275,6 +285,7 @@ void ViNode::decision(void)
 	}
 
 	step++;
+	*/
 }
 
 }

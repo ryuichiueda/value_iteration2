@@ -19,6 +19,7 @@ void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, i
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta)
 {
+	RCUTILS_LOG_INFO("SET MAP");
 	cell_num_t_ = theta_cell_num;
 	goal_margin_radius_ = goal_margin_radius;
 	goal_margin_theta_ = goal_margin_theta;
@@ -28,6 +29,7 @@ void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, i
 
 	xy_resolution_ = map.info.resolution;
 	t_resolution_ = 360/cell_num_t_;
+	RCUTILS_LOG_INFO("GLOBAL: %lf %lf", map.info.resolution, xy_resolution_);
 
 	map_origin_x_ = map.info.origin.position.x;
 	map_origin_y_ = map.info.origin.position.y;
@@ -364,6 +366,7 @@ void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int 
 	map.header.stamp = ros_clock_.now();
 	map.header.frame_id = "map";
 	map.info.resolution = xy_resolution_;
+	RCUTILS_LOG_INFO("%lf %lf", map.info.resolution, xy_resolution_);
 	map.info.width = cell_num_x_;
 	map.info.height = cell_num_y_;
 	map.info.origin.position.x = map_origin_x_;
@@ -371,6 +374,7 @@ void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int 
 	map.info.origin.orientation = map_origin_quat_;
 
         int it = (int)floor( ( ((int)(yaw_rad/M_PI*180) + 360*100)%360 )/t_resolution_ );
+
 
 	for(int y=0; y<cell_num_y_; y++)
 		for(int x=0; x<cell_num_x_; x++){

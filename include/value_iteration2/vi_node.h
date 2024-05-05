@@ -43,7 +43,8 @@ public:
 private:
 	std::vector<Action> *actions_;
 	std::shared_ptr<ValueIteratorLocal> vi_;
-	rclcpp::TimerBase::SharedPtr timer_;
+	rclcpp::TimerBase::SharedPtr decision_timer_;
+	rclcpp::TimerBase::SharedPtr value_pub_timer_;
 
 	/*
 	ros::NodeHandle nh_;
