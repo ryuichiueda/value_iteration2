@@ -195,14 +195,17 @@ void ValueIterator::valueIterationWorker(int times, int id)
 
 	for(int j=0; j<times; j++){
 		thread_status_[id]._sweep_step = j+1;
+		RCUTILS_LOG_INFO("SWEEP %d", j);
 
 		uint64_t max_delta = 0;
 		for(auto i : sweep_orders_[id%sweep_orders_.size()])
 			max_delta = max(max_delta, valueIteration(states_[i]));
 	
+		RCUTILS_LOG_INFO("SWEEP2 %d", j);
 		thread_status_[id]._delta = (double)(max_delta >> prob_base_bit_);
 		if(status_ == "canceled" or status_ == "goal" )
 			break;
+		RCUTILS_LOG_INFO("SWEEP3 %d", j);
 	}
 
 	thread_status_[id]._finished = true;

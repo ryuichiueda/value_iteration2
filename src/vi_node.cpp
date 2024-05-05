@@ -186,13 +186,21 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 	RCLCPP_INFO(get_logger(), "SET");
 
 	vector<thread> ths;
+	/*
 	for(int t=0; t<vi_->thread_num_; t++)
 		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
+		*/
+	for(int t=0; t<vi_->thread_num_; t++){
+		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
+		ths[t].detach();
+	}
 
-	RCLCPP_INFO(get_logger(), "OK");
+	RCLCPP_INFO(get_logger(), "OK4");
+	/*
 	if(online_)
 		thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get()).detach();
-	RCLCPP_INFO(get_logger(), "OK2");
+	RCLCPP_INFO(get_logger(), "OK3");
+	*/
 
 	/*
 	value_iteration2::ViFeedback vi_feedback;
@@ -209,8 +217,10 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 	as_->publishFeedback(vi_feedback);
 	*/
 
+	/*
 	for(auto &th : ths)
 		th.join();
+		*/
 	RCLCPP_INFO(get_logger(), "JOINED");
 
 	/*
