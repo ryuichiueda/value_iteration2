@@ -24,7 +24,6 @@
 
 #include <grid_map_msgs/GetGridMap.h>
 #include <std_msgs/UInt32MultiArray.h>
-#include <tf/tf.h>
 
 #include <tf/transform_listener.h>
 */
@@ -59,7 +58,7 @@ private:
 	rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_laser_scan_;
 	rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr sub_goal_;
 
-	void executeVi(void);
+	void executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg);
 	/*
 	tf::TransformListener tf_listener_;
 

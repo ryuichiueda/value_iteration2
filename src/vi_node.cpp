@@ -4,6 +4,8 @@
 #include "value_iteration2/vi_node.h"
 #include "nav_msgs/srv/get_map.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2/LinearMath/Matrix3x3.h"
 
 namespace value_iteration2{
 
@@ -150,7 +152,7 @@ void ViNode::scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg)
 
 void ViNode::goalReceived(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg) 
 {
-	RCLCPP_INFO(this->get_logger(), "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	executeVi(msg);
 }
 
 /*
@@ -167,18 +169,18 @@ bool ViNode::serveValue(grid_map_msgs::GetGridMap::Request& request, grid_map_ms
 }
 
 */
-void ViNode::executeVi(void)
+void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg) 
 {
-	/*
 	static bool executing = true;
-	ROS_INFO("VALUE ITERATION START");
-	auto &ori = goal->goal.pose.orientation;	
-	tf::Quaternion q(ori.x, ori.y, ori.z, ori.w);
+	RCLCPP_INFO(get_logger(), "VALUE ITERATION START");
+	auto &ori = msg->pose.orientation;	
+	tf2::Quaternion q(ori.x, ori.y, ori.z, ori.w);
 	double roll, pitch, yaw;
-	tf::Matrix3x3(q).getRPY(roll, pitch, yaw);
+	tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
 	int t = (int)(yaw*180/M_PI);
-	vi_->setGoal(goal->goal.pose.position.x, goal->goal.pose.position.y, t);
+	vi_->setGoal(msg->pose.position.x, msg->pose.position.y, t);
 
+	/*
 	vector<thread> ths;
 	for(int t=0; t<vi_->thread_num_; t++)
 		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
