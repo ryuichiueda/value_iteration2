@@ -40,6 +40,7 @@ public:
 	void pubValueFunction(void);
 	void decision(void);
 
+	void runThreads(void);
 private:
 	std::vector<Action> *actions_;
 	std::shared_ptr<ValueIteratorLocal> vi_;

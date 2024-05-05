@@ -172,9 +172,23 @@ bool ViNode::serveValue(grid_map_msgs::GetGridMap::Request& request, grid_map_ms
 }
 
 */
+
+void ViNode::runThreads(void)
+{
+	vi_->setGoal(0.0, 0.0, 0);
+
+	vector<thread> ths;
+	for(int t=0; t<vi_->thread_num_; t++){
+		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
+		ths[t].detach();
+	}
+
+	if(online_)
+		thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get()).detach();
+}
+
 void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg) 
 {
-	//static bool executing = true;
 	RCLCPP_INFO(get_logger(), "VALUE ITERATION START");
 	auto &ori = msg->pose.orientation;	
 	tf2::Quaternion q(ori.x, ori.y, ori.z, ori.w);
@@ -183,60 +197,15 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 	int t = (int)(yaw*180/M_PI);
 	RCLCPP_INFO(get_logger(), "GOAL: %lf %lf %d", msg->pose.position.x, msg->pose.position.y, t);
 	vi_->setGoal(msg->pose.position.x, msg->pose.position.y, t);
-	RCLCPP_INFO(get_logger(), "SET");
 
 	vector<thread> ths;
-	/*
-	for(int t=0; t<vi_->thread_num_; t++)
-		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
-		*/
 	for(int t=0; t<vi_->thread_num_; t++){
 		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
 		ths[t].detach();
 	}
 
-	RCLCPP_INFO(get_logger(), "OK4");
-	/*
 	if(online_)
 		thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get()).detach();
-	RCLCPP_INFO(get_logger(), "OK3");
-	*/
-
-	/*
-	value_iteration2::ViFeedback vi_feedback;
-
-	ros::Rate loop_rate(10);
-	while(not vi_->finished(vi_feedback.current_sweep_times, vi_feedback.deltas)){
-		as_->publishFeedback(vi_feedback);
-
-		if(as_->isPreemptRequested())
-			vi_->setCancel();
-
-		loop_rate.sleep();
-	}
-	as_->publishFeedback(vi_feedback);
-	*/
-
-	/*
-	for(auto &th : ths)
-		th.join();
-		*/
-	RCLCPP_INFO(get_logger(), "JOINED");
-
-	/*
-	while(not vi_->endOfTrial() )
-		if(as_->isPreemptRequested()){
-			vi_->setCancel();
-
-		loop_rate.sleep();
-	}*/
-
-	RCLCPP_INFO(get_logger(), "END OF TRIAL");
-	/*
-	value_iteration2::ViResult vi_result;
-	vi_result.finished = vi_->arrived();
-	as_->setSucceeded(vi_result);
-	*/
 }
 
 void ViNode::pubValueFunction(void)
@@ -308,6 +277,7 @@ int main(int argc, char **argv)
 
 	rclcpp::WallRate loop(10);
 	node->init();
+	node->runThreads();
 	rclcpp::spin(node);
 	/*
 	while (rclcpp::ok()) {
