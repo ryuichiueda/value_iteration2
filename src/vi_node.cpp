@@ -197,7 +197,9 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 	int t = (int)(yaw*180/M_PI);
 	RCLCPP_INFO(get_logger(), "GOAL: %lf %lf %d", msg->pose.position.x, msg->pose.position.y, t);
 	vi_->setGoal(msg->pose.position.x, msg->pose.position.y, t);
+	RCLCPP_INFO(get_logger(), "START!!!");
 
+	/*
 	vector<thread> ths;
 	for(int t=0; t<vi_->thread_num_; t++){
 		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
@@ -206,6 +208,7 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 
 	if(online_)
 		thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get()).detach();
+		*/
 }
 
 void ViNode::pubValueFunction(void)
