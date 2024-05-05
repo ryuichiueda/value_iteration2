@@ -146,7 +146,6 @@ void ViNode::setActions(void)
 
 void ViNode::scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg)
 {
-	RCLCPP_INFO(this->get_logger(),"received! %ld", msg->ranges.size());
 	vi_->setLocalCost(msg, x_, y_, yaw_);
 }
 
