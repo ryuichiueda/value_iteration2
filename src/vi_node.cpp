@@ -6,6 +6,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2/LinearMath/Matrix3x3.h"
+#include <climits>
 
 namespace value_iteration2{
 
@@ -170,7 +171,7 @@ bool ViNode::serveValue(grid_map_msgs::GetGridMap::Request& request, grid_map_ms
 */
 void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg) 
 {
-	static bool executing = true;
+	//static bool executing = true;
 	RCLCPP_INFO(get_logger(), "VALUE ITERATION START");
 	auto &ori = msg->pose.orientation;	
 	tf2::Quaternion q(ori.x, ori.y, ori.z, ori.w);
@@ -179,18 +180,15 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 	int t = (int)(yaw*180/M_PI);
 	vi_->setGoal(msg->pose.position.x, msg->pose.position.y, t);
 
-	/*
 	vector<thread> ths;
 	for(int t=0; t<vi_->thread_num_; t++)
 		ths.push_back(thread(&ValueIterator::valueIterationWorker, vi_.get(), INT_MAX, t));
 
 	if(online_)
-		thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get(), 1).detach();
-//		for(int t=0;t<1;t++)
-//			thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get(), t).detach();
+		thread(&ValueIteratorLocal::localValueIterationWorker, vi_.get()).detach();
 
-
-	value_iteration::ViFeedback vi_feedback;
+	/*
+	value_iteration2::ViFeedback vi_feedback;
 
 	ros::Rate loop_rate(10);
 	while(not vi_->finished(vi_feedback.current_sweep_times, vi_feedback.deltas)){
@@ -202,22 +200,25 @@ void ViNode::executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg
 		loop_rate.sleep();
 	}
 	as_->publishFeedback(vi_feedback);
+	*/
 
 	for(auto &th : ths)
 		th.join();
 
+	/*
 	while(not vi_->endOfTrial() )
 		if(as_->isPreemptRequested()){
 			vi_->setCancel();
 
 		loop_rate.sleep();
-	}
+	}*/
 
-	ROS_INFO("END OF TRIAL");
-	value_iteration::ViResult vi_result;
+	RCLCPP_INFO(get_logger(), "END OF TRIAL");
+	/*
+	value_iteration2::ViResult vi_result;
 	vi_result.finished = vi_->arrived();
 	as_->setSucceeded(vi_result);
-*/
+	*/
 }
 
 void ViNode::pubValueFunction(void)
