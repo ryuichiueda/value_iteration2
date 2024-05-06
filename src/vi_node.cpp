@@ -7,6 +7,10 @@
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2/LinearMath/Matrix3x3.h"
 #include <climits>
+#include <tf2/utils.h>
+#include <tf2/transform_datatypes.h>
+#include <tf2/convert.h>
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 namespace value_iteration2{
 
@@ -123,6 +127,12 @@ void ViNode::setCommunication(void)
 		RCLCPP_INFO(this->get_logger(),"set scan");
 		sub_goal_ = create_subscription<geometry_msgs::msg::PoseStamped>("/goal_pose", 1,
 				std::bind(&ViNode::goalReceived, this, std::placeholders::_1));
+
+	        tf_listener_.reset();
+	        tf_buffer_.reset();
+	
+	        tf_buffer_ = std::make_shared<tf2_ros::Buffer>(get_clock());
+	        tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 	}
 
 	pub_value_function_ = create_publisher<nav_msgs::msg::OccupancyGrid>("/value_function", 2);
@@ -230,44 +240,39 @@ void ViNode::decision(void)
 
 	pub_cmd_vel_->publish(cmd_vel);
 	*/
-	/*
 	if(not online_)
 		return; 
 
 	try{
-		tf::StampedTransform trans;
-		tf_listener_.waitForTransform("map", "base_link", ros::Time(0), ros::Duration(0.1));
-		tf_listener_.lookupTransform("map", "base_link", ros::Time(0), trans);
-		x_ = trans.getOrigin().x();
-		y_ = trans.getOrigin().y();
-		yaw_ = tf::getYaw(trans.getRotation());
-	}catch(tf::TransformException &e){
-		ROS_WARN("%s", e.what());
+		//tf2::StampedTransform trans;
+		//tf2::Stamped<tf2::Transform> trans;
+		//tf_listener_.waitForTransform("map", "base_link", ros::Time(0), ros::Duration(0.1));
+		tf_buffer_->canTransform("map", "base_link", rclcpp::Time(0), rclcpp::Duration::from_seconds(0.1));
+		//tf_buffer_->lookupTransform("map", "base_link", rclcpp::Time(0), trans);
+		geometry_msgs::msg::TransformStamped trans = tf_buffer_->lookupTransform("map", "base_link", tf2::TimePointZero);
+		//x_ = trans->getOrigin().x();
+		x_ = trans.transform.translation.x;
+		//y_ = trans->getOrigin().y();
+		y_ = trans.transform.translation.y;
+		//yaw_ = tf2::getYaw(trans->getRotation());
+		yaw_ = tf2::getYaw(trans.transform.rotation);
+	}catch(tf2::TransformException &e){
+		//ROS_WARN("%s", e.what());
+		RCLCPP_WARN(this->get_logger(),"%s", e.what());
 	}
 
 	vi_->setLocalWindow(x_, y_);
 
-	geometry_msgs::Twist cmd_vel;
+	geometry_msgs::msg::Twist cmd_vel;
 	cmd_vel.linear.x = 0.0;
 	cmd_vel.angular.z = 0.0;
 
 	Action *a = vi_->posToAction(x_, y_, yaw_);
 	if(a != NULL){
-		cmd_vel.linear.x = a->_delta_fw;
-		cmd_vel.angular.z = a->_delta_rot/180*M_PI;
+		cmd_vel.linear.x = a->delta_fw_;
+		cmd_vel.angular.z = a->delta_rot_/180*M_PI;
 	}
-	pub_cmd_vel_.publish(cmd_vel);
-	*/
-
-	/*
-	static int step = 0;
-
-	if (step%30 == 0) {
-		pubValueFunction();
-	}
-
-	step++;
-	*/
+	pub_cmd_vel_->publish(cmd_vel);
 }
 
 }

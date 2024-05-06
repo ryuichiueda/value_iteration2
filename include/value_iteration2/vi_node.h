@@ -12,6 +12,8 @@
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
+#include "tf2_ros/transform_listener.h"
+#include "tf2_ros/buffer.h"
 
 /*
 #include <ros/ros.h>
@@ -59,6 +61,9 @@ private:
 	rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr pub_value_function_;
 	rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_laser_scan_;
 	rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr sub_goal_;
+
+        std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+        std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
 
 	void executeVi(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg);
 	/*

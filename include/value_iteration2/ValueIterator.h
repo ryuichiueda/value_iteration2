@@ -35,7 +35,7 @@ protected:
 	uint64_t actionCost(State &s, Action &a);
 public:
 	void setGoal(double goal_x, double goal_y, int goal_t);
-	void valueIterationWorker(int times, int id);
+	void valueIterationWorker(unsigned int times, int id);
 /* calculation */
 protected: 
 	int toIndex(int ix, int iy, int it);
