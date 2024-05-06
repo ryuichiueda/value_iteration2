@@ -74,12 +74,18 @@ uint64_t ValueIteratorLocal::valueIterationLocal(State &s)
 
 Action *ValueIteratorLocal::posToAction(double x, double y, double t_rad)
 {
+	RCUTILS_LOG_INFO("posToAction");
+
         int ix = (int)floor( (x - map_origin_x_)/xy_resolution_ );
         int iy = (int)floor( (y - map_origin_y_)/xy_resolution_ );
 
         int t = (int)(180 * t_rad / M_PI);
         int it = (int)floor( ( (t + 360*100)%360 )/t_resolution_ );
 	int index = toIndex(ix, iy, it);
+	//RCUTILS_LOG_INFO("INDEX: %d, ix: %d, iy: %d, it: %d SIZE: %d", index, ix, iy, it, states_.size());
+	if (index < 0 || index >= (int)states_.size()) {
+		return NULL;
+	}
 
 	if(states_[index].final_state_){
 		status_ = "goal";

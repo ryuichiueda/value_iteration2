@@ -261,6 +261,7 @@ void ViNode::decision(void)
 		RCLCPP_WARN(this->get_logger(),"%s", e.what());
 	}
 
+	RCLCPP_INFO(this->get_logger(),"X: %lf, Y: %lf, T: %lf", x_, y_, yaw_);
 	vi_->setLocalWindow(x_, y_);
 
 	geometry_msgs::msg::Twist cmd_vel;
