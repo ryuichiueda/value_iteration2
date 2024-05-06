@@ -201,8 +201,10 @@ void ValueIterator::valueIterationWorker(unsigned int times, int id)
 			max_delta = max(max_delta, valueIteration(states_[i]));
 	
 		thread_status_[id]._delta = (double)(max_delta >> prob_base_bit_);
+		/*
 		if(status_ == "canceled" or status_ == "goal" )
 			break;
+			*/
 	}
 
 	thread_status_[id]._finished = true;
@@ -445,7 +447,7 @@ Action *ValueIterator::posToAction(double x, double y, double t_rad)
 	int index = toIndex(ix, iy, it);
 
 	if(states_[index].final_state_){
-		status_ = "goal";
+		//status_ = "goal";
 		return NULL;
 	}else if(states_[index].optimal_action_ != NULL){
 		RCUTILS_LOG_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);
