@@ -36,10 +36,10 @@ protected:
 /* robot control */
 public: 
 	bool endOfTrial(void);
-	bool arrived(void);
+	//bool arrived(void);
 	Action *posToAction(double x, double y, double t_rad);
-	void setCalculated(void);
-	bool isCalculated(void);
+	//void setCalculated(void);
+	//bool isCalculated(void);
 /* initialization */
 	ValueIterator(std::vector<Action> &actions, int thread_num);
 	bool setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
@@ -69,7 +69,7 @@ public:
 	void setCancel(void);
 	bool finished(std_msgs::msg::UInt32MultiArray &sweep_times, std_msgs::msg::Float32MultiArray &deltas);
 protected:
-	std::string status_;
+	//std::string status_;
 
 /* parameters */
 public: 

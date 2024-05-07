@@ -9,7 +9,7 @@
 namespace value_iteration2 {
 
 ValueIterator::ValueIterator(std::vector<Action> &actions, int thread_num)
-	: actions_(actions), ros_clock_(RCL_SYSTEM_TIME), status_("init"),
+	: actions_(actions), ros_clock_(RCL_SYSTEM_TIME), /*status_("init"),*/
 	goal_x_(0.0), goal_y_(0.0), goal_t_(0), thread_num_(thread_num)
 {
 }
@@ -365,7 +365,7 @@ void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 
 	thread_status_.clear();
 	setStateValues();
-	status_ = "calculating";
+	//status_ = "calculating";
 }
 
 void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, double yaw_rad)
@@ -427,6 +427,7 @@ void ValueIterator::setSweepOrders(void)
 	}
 }
 
+/*
 void ValueIterator::setCancel(void)
 {
 	status_ = "canceled";
@@ -441,6 +442,7 @@ bool ValueIterator::arrived(void)
 {
 	return status_ == "goal";
 }
+*/
 
 Action *ValueIterator::posToAction(double x, double y, double t_rad)
 {
@@ -463,6 +465,7 @@ Action *ValueIterator::posToAction(double x, double y, double t_rad)
 
 }
 
+/*
 void ValueIterator::setCalculated(void)
 {
 	if(status_ != "canceled")
@@ -473,5 +476,6 @@ bool ValueIterator::isCalculated(void)
 {
 	return status_ == "calculated";
 }
+*/
 }
 

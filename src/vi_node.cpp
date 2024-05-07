@@ -30,6 +30,7 @@ void ViNode::init(void)
 {
 	setCommunication();
         setMap();
+	RCLCPP_INFO(get_logger(), "!!!!!!!!!!! INIT DONE !!!!!!!!!!abc");
 }
 
 ViNode::~ViNode() 
@@ -73,7 +74,6 @@ void ViNode::setMap(void)
 				if (vi_->setMapWithOccupancyGrid(res.get()->map,
 					theta_cell_num, safety_radius, safety_radius_penalty,
 					goal_margin_radius, goal_margin_theta)) {
-					RCLCPP_INFO(get_logger(), "MAP SET");
 					break;
 				}
 			} else {

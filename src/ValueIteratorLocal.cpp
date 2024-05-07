@@ -32,14 +32,16 @@ bool ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &m
 
 void ValueIteratorLocal::localValueIterationWorker(void)
 {
+	/*
 	while(status_ == "canceled" or status_ == "goal"){
 		RCUTILS_LOG_INFO("STATUS PROBLEM: %s", status_.c_str());
 		status_ = "executing";
 	}
 
 	while(status_ != "canceled" and status_ != "goal"){
+	*/
 		localValueIterationLoop();
-	}
+	//}
 }
 
 void ValueIteratorLocal::localValueIterationLoop(void)
@@ -89,7 +91,7 @@ Action *ValueIteratorLocal::posToAction(double x, double y, double t_rad)
 	}
 
 	if(states_[index].final_state_){
-		status_ = "goal";
+		//status_ = "goal";
 		return NULL;
 	}else if(states_[index].optimal_action_ != NULL){
 		RCUTILS_LOG_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);
