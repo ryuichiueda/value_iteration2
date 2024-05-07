@@ -12,16 +12,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include <grid_map_msgs/srv/get_grid_map.hpp>
 
-/*
-#include "ros/ros.h"
-#include "nav_msgs/GetMap.h"
-#include "sensor_msgs/LaserScan.h"
-#include <grid_map_msgs/GetGridMap.h>
-#include <fstream>
-#include <vector>
-
-*/
-
 namespace value_iteration2 {
 
 class ValueIterator {
@@ -52,7 +42,7 @@ public:
 	bool isCalculated(void);
 /* initialization */
 	ValueIterator(std::vector<Action> &actions, int thread_num);
-	void setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
+	bool setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta);
 

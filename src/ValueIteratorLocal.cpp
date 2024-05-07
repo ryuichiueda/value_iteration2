@@ -10,12 +10,15 @@ ValueIteratorLocal::ValueIteratorLocal(std::vector<Action> &actions, int thread_
 	local_ix_min_ = local_ix_max_ = local_iy_min_ = local_iy_max_ = 0;
 }
 
-void ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
+bool ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta)
 {
-	ValueIterator::setMapWithOccupancyGrid(map, theta_cell_num, safety_radius, safety_radius_penalty,
-			goal_margin_radius, goal_margin_theta);
+	if(! ValueIterator::setMapWithOccupancyGrid(map, theta_cell_num, safety_radius, safety_radius_penalty,
+			goal_margin_radius, goal_margin_theta)){
+		return false;
+	}
+
 	RCUTILS_LOG_INFO("LOCAL: %lf %lf", map.info.resolution, xy_resolution_);
 
 	local_xy_range_ = 1.0;
@@ -24,6 +27,7 @@ void ValueIteratorLocal::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &m
 	local_iy_min_ = 0;
 	local_ix_max_ = local_ixy_range_*2;
 	local_iy_max_ = local_ixy_range_*2;
+	return true;
 }
 
 void ValueIteratorLocal::localValueIterationWorker(void)
@@ -74,15 +78,12 @@ uint64_t ValueIteratorLocal::valueIterationLocal(State &s)
 
 Action *ValueIteratorLocal::posToAction(double x, double y, double t_rad)
 {
-	RCUTILS_LOG_INFO("posToAction");
-
         int ix = (int)floor( (x - map_origin_x_)/xy_resolution_ );
         int iy = (int)floor( (y - map_origin_y_)/xy_resolution_ );
 
         int t = (int)(180 * t_rad / M_PI);
         int it = (int)floor( ( (t + 360*100)%360 )/t_resolution_ );
 	int index = toIndex(ix, iy, it);
-	//RCUTILS_LOG_INFO("INDEX: %d, ix: %d, iy: %d, it: %d SIZE: %d", index, ix, iy, it, states_.size());
 	if (index < 0 || index >= (int)states_.size()) {
 		return NULL;
 	}

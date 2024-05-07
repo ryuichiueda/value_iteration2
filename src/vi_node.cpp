@@ -55,41 +55,34 @@ void ViNode::setMap(void)
 	std::string map_type = get_parameter("map_type").as_string();
 	if(map_type == "occupancy"){
 	
-			sleep(10);
-		auto client = create_client<nav_msgs::srv::GetMap>("/map_server/map");
-		while (!client->wait_for_service(1s)) {
-			if (!rclcpp::ok()) {
-				RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for map.");
-				return;
+		while (true) {
+			auto client = create_client<nav_msgs::srv::GetMap>("/map_server/map");
+			while (!client->wait_for_service(1s)) {
+				if (!rclcpp::ok()) {
+					RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for map.");
+					return;
+				}
+				RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "map server not available, waiting again...");
 			}
-			RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "map server not available, waiting again...");
-		}
-	
-		auto req = std::make_shared<nav_msgs::srv::GetMap::Request>();
-		auto res = client->async_send_request(req);
 		
-		if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), res) == rclcpp::FutureReturnCode::SUCCESS) {
-			vi_->setMapWithOccupancyGrid(res.get()->map, theta_cell_num, safety_radius, safety_radius_penalty,
-				goal_margin_radius, goal_margin_theta);
-		} else {
-			RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call map service");
+			auto req = std::make_shared<nav_msgs::srv::GetMap::Request>();
+			auto res = client->async_send_request(req);
+			
+			if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), res) 
+					== rclcpp::FutureReturnCode::SUCCESS) {
+				if (vi_->setMapWithOccupancyGrid(res.get()->map,
+					theta_cell_num, safety_radius, safety_radius_penalty,
+					goal_margin_radius, goal_margin_theta)) {
+					RCLCPP_INFO(get_logger(), "MAP SET");
+					break;
+				}
+			} else {
+				RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call map service");
+			}
+			sleep(1);
 		}
-
 
 	/*
-		while(!ros::service::waitForService("/static_map", ros::Duration(3.0))){
-			ROS_INFO("Waiting for static_map");
-		}
-
-		ros::ServiceClient client = nh_.serviceClient<nav_msgs::GetMap>("/static_map");
-		nav_msgs::GetMap::Request req;
-		if(not client.call(req, res)){
-			ROS_ERROR("static_map not working");
-			exit(1);
-		}
-	
-		vi_->setMapWithOccupancyGrid(res.map, theta_cell_num, safety_radius, safety_radius_penalty,
-			goal_margin_radius, goal_margin_theta);
 	}else if(map_type == "cost"){
 		while(!ros::service::waitForService("/cost_map", ros::Duration(3.0))){
 			ROS_INFO("Waiting for cost_map");
@@ -232,32 +225,16 @@ void ViNode::pubValueFunction(void)
 
 void ViNode::decision(void)
 {
-	/*
-	geometry_msgs::msg::Twist cmd_vel;
-	cmd_vel.linear.x = 0.00;
-	cmd_vel.angular.z = 0.0;
-	RCLCPP_INFO(this->get_logger(),"pub");
-
-	pub_cmd_vel_->publish(cmd_vel);
-	*/
 	if(not online_)
 		return; 
 
 	try{
-		//tf2::StampedTransform trans;
-		//tf2::Stamped<tf2::Transform> trans;
-		//tf_listener_.waitForTransform("map", "base_link", ros::Time(0), ros::Duration(0.1));
 		tf_buffer_->canTransform("map", "base_link", rclcpp::Time(0), rclcpp::Duration::from_seconds(0.1));
-		//tf_buffer_->lookupTransform("map", "base_link", rclcpp::Time(0), trans);
 		geometry_msgs::msg::TransformStamped trans = tf_buffer_->lookupTransform("map", "base_link", tf2::TimePointZero);
-		//x_ = trans->getOrigin().x();
 		x_ = trans.transform.translation.x;
-		//y_ = trans->getOrigin().y();
 		y_ = trans.transform.translation.y;
-		//yaw_ = tf2::getYaw(trans->getRotation());
 		yaw_ = tf2::getYaw(trans.transform.rotation);
 	}catch(tf2::TransformException &e){
-		//ROS_WARN("%s", e.what());
 		RCLCPP_WARN(this->get_logger(),"%s", e.what());
 	}
 
@@ -272,8 +249,8 @@ void ViNode::decision(void)
 	if(a != NULL){
 		cmd_vel.linear.x = a->delta_fw_;
 		cmd_vel.angular.z = a->delta_rot_/180*M_PI;
+		pub_cmd_vel_->publish(cmd_vel);
 	}
-	pub_cmd_vel_->publish(cmd_vel);
 }
 
 }
@@ -282,22 +259,10 @@ int main(int argc, char **argv)
 {
 	rclcpp::init(argc,argv);
 	auto node = std::make_shared<value_iteration2::ViNode>();
-//	int step = 0;
 
 	rclcpp::WallRate loop(10);
 	node->init();
 	node->runThreads();
 	rclcpp::spin(node);
-	/*
-	while (rclcpp::ok()) {
-		node->decision();
-
-		//if(step % 30 == 0)
-		//	vi_node.pubValueFunction();
-		//
-
-		loop.sleep();
-		step++;
-	}*/
 	return 0;
 }

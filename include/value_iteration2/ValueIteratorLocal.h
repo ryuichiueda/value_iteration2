@@ -15,7 +15,7 @@ public:
 	uint64_t valueIterationLocal(State &s);
 	void localValueIterationWorker(void);
 
-	void setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
+	bool setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta);
 

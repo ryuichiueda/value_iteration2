@@ -15,10 +15,13 @@ ValueIterator::ValueIterator(std::vector<Action> &actions, int thread_num)
 }
 
 
-void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
+bool ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
 		double safety_radius, double safety_radius_penalty,
 		double goal_margin_radius, int goal_margin_theta)
 {
+	if ( map.info.width <= 0 || map.info.height <= 0 || map.info.resolution < 0.0001 )
+		return false;
+
 	RCUTILS_LOG_INFO("SET MAP");
 	cell_num_t_ = theta_cell_num;
 	goal_margin_radius_ = goal_margin_radius;
@@ -40,6 +43,8 @@ void ValueIterator::setMapWithOccupancyGrid(nav_msgs::msg::OccupancyGrid &map, i
 	setStateTransition();
 	setSweepOrders();
 	RCUTILS_LOG_INFO("SET STATES END");
+
+	return true;
 }
 
 void ValueIterator::setMapWithCostGrid(nav_msgs::msg::OccupancyGrid &map, int theta_cell_num,
