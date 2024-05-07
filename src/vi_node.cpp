@@ -226,8 +226,14 @@ void ViNode::pubValueFunction(void)
 
 void ViNode::decision(void)
 {
-	if(not online_ or vi_->idling_)
+	geometry_msgs::msg::Twist cmd_vel;
+	cmd_vel.linear.x = 0.0;
+	cmd_vel.angular.z = 0.0;
+
+	if(not online_ or vi_->idling_) {
+		pub_cmd_vel_->publish(cmd_vel);
 		return; 
+	}
 
 	try{
 		tf_buffer_->canTransform("map", "base_link", rclcpp::Time(0), rclcpp::Duration::from_seconds(0.1));
@@ -241,10 +247,6 @@ void ViNode::decision(void)
 
 	RCLCPP_INFO(this->get_logger(),"X: %lf, Y: %lf, T: %lf", x_, y_, yaw_);
 	vi_->setLocalWindow(x_, y_);
-
-	geometry_msgs::msg::Twist cmd_vel;
-	cmd_vel.linear.x = 0.0;
-	cmd_vel.angular.z = 0.0;
 
 	Action *a = vi_->posToAction(x_, y_, yaw_);
 	if(a != NULL){

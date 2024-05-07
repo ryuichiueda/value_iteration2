@@ -94,7 +94,7 @@ Action *ValueIteratorLocal::posToAction(double x, double y, double t_rad)
 	}
 
 	if(states_[index].final_state_){
-		//status_ = "goal";
+		idling_ = true;
 		return NULL;
 	}else if(states_[index].optimal_action_ != NULL){
 		RCUTILS_LOG_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);
