@@ -9,7 +9,7 @@
 namespace value_iteration2 {
 
 ValueIterator::ValueIterator(std::vector<Action> &actions, int thread_num)
-	: actions_(actions), ros_clock_(RCL_SYSTEM_TIME), /*status_("init"),*/
+	: actions_(actions), ros_clock_(RCL_SYSTEM_TIME), idling_(true), 
 	goal_x_(0.0), goal_y_(0.0), goal_t_(0), thread_num_(thread_num)
 {
 }
@@ -180,7 +180,6 @@ uint64_t ValueIterator::valueIteration(State &s)
 	Action *min_action = NULL;
 	for(auto &a : actions_){
 		uint64_t c = actionCost(s, a);
-		//int64_t c = actionCost(s, a);
 		if(c < min_cost){
 			min_cost = c;
 			min_action = &a;
@@ -199,6 +198,10 @@ void ValueIterator::valueIterationWorker(unsigned int times, int id)
 	thread_status_.insert(make_pair(id, SweepWorkerStatus()));
 
 	for(unsigned int j=0; j<times; j++){
+		if (idling_) {
+			sleep(1);
+		}
+
 		thread_status_[id]._sweep_step = j+1;
 
 		uint64_t max_delta = 0;
@@ -206,10 +209,6 @@ void ValueIterator::valueIterationWorker(unsigned int times, int id)
 			max_delta = max(max_delta, valueIteration(states_[i]));
 	
 		thread_status_[id]._delta = (double)(max_delta >> prob_base_bit_);
-		/*
-		if(status_ == "canceled" or status_ == "goal" )
-			break;
-			*/
 	}
 
 	thread_status_[id]._finished = true;
@@ -361,11 +360,10 @@ void ValueIterator::setGoal(double goal_x, double goal_y, int goal_t)
 	goal_y_ = goal_y;
 	goal_t_ = goal_t;
 
-	//RCUTILS_LOG_INFO("GOAL: %f, %f, %d", goal_x_, goal_y_, goal_t_);
+	RCUTILS_LOG_INFO("SET GOAL: %f, %f, %d", goal_x_, goal_y_, goal_t_);
 
 	thread_status_.clear();
 	setStateValues();
-	//status_ = "calculating";
 }
 
 void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int threshold, double yaw_rad)
@@ -454,7 +452,7 @@ Action *ValueIterator::posToAction(double x, double y, double t_rad)
 	int index = toIndex(ix, iy, it);
 
 	if(states_[index].final_state_){
-		//status_ = "goal";
+		idling_ = true;
 		return NULL;
 	}else if(states_[index].optimal_action_ != NULL){
 		RCUTILS_LOG_INFO("COST TO GO: %f", (double)states_[index].total_cost_/ValueIterator::prob_base_);

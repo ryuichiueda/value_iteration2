@@ -30,7 +30,7 @@ void ViNode::init(void)
 {
 	setCommunication();
         setMap();
-	RCLCPP_INFO(get_logger(), "!!!!!!!!!!! INIT DONE !!!!!!!!!!abc");
+	RCLCPP_INFO(get_logger(), "!!!!!!!!!!! INIT DONE !!!!!!!!!!ddd");
 }
 
 ViNode::~ViNode() 
@@ -158,6 +158,7 @@ void ViNode::scanReceived(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg)
 
 void ViNode::goalReceived(const geometry_msgs::msg::PoseStamped::ConstSharedPtr msg) 
 {
+	vi_->idling_ = false;
 	executeVi(msg);
 }
 
@@ -225,7 +226,7 @@ void ViNode::pubValueFunction(void)
 
 void ViNode::decision(void)
 {
-	if(not online_)
+	if(not online_ or vi_->idling_)
 		return; 
 
 	try{

@@ -68,8 +68,8 @@ public:
 	std::map<int, SweepWorkerStatus> thread_status_; 
 	void setCancel(void);
 	bool finished(std_msgs::msg::UInt32MultiArray &sweep_times, std_msgs::msg::Float32MultiArray &deltas);
-protected:
-	//std::string status_;
+
+	bool idling_;
 
 /* parameters */
 public: 

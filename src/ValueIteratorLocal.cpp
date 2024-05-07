@@ -37,11 +37,14 @@ void ValueIteratorLocal::localValueIterationWorker(void)
 		RCUTILS_LOG_INFO("STATUS PROBLEM: %s", status_.c_str());
 		status_ = "executing";
 	}
-
-	while(status_ != "canceled" and status_ != "goal"){
 	*/
+
+	while(true) {
+		if (idling_) {
+			sleep(1);
+		}
 		localValueIterationLoop();
-	//}
+	}
 }
 
 void ValueIteratorLocal::localValueIterationLoop(void)
