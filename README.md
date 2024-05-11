@@ -19,12 +19,7 @@ $ source install/local_setup.bash
 $ ros2 launch value_iteration2 turtle.launch.py
 ```
 
-### how to use with RViz
-
-[![](https://img.youtube.com/vi/YWBFev-naIo/0.jpg)](https://www.youtube.com/watch?v=YWBFev-naIo)
-
-### with obstacles given in Gazebo
-
+### how to use with RViz and Gazebo
 
 [![](https://img.youtube.com/vi/qNjMH5Ao6QM/0.jpg)](https://www.youtube.com/watch?v=qNjMH5Ao6QM)
 
