@@ -10,7 +10,7 @@ a monolithic mobile robot navigation system as a replacement for the navigation 
 $ sudo apt install ros-humble-grid-map*
 $ sudo apt install ... (I will write later about required packages. )
 $ cd <workspace>
-$ git clone https://github.com/ryuichiueda/emcl2_ros2.git
+$ git clone https://github.com/ryuichiueda/emcl2_ros2.git #Please use this version due to a problem of launch file.
 $ git clone https://github.com/ryuichiueda/value_iteration2.git
 $ cd <workspace>
 $ colcon build
