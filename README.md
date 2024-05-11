@@ -26,3 +26,32 @@ $ ros2 launch value_iteration2 turtle.launch.py
 ## topic
 
 ... writing ...
+
+## Nodes
+
+### vi_node
+
+This node executes value iteration.
+
+#### how to execute value iteration
+
+Give the goal to topic `/goal_pose`. The planner immediately starts working and giving the velocity of the robot through `/cmd_vel`. The action server is not implemented in this stage.
+
+#### Services Called
+
+* static_map ([nav_msgs/srv/GetMap](https://docs.ros2.org/foxy/api/nav_msgs/srv/GetMap.html))
+    * Initiate the map for value iteration.
+
+#### Subscribed Topics
+
+* goal_pose ([geometry_msgs/msg/PoseStamped](https://docs.ros2.org/latest/api/geometry_msgs/msg/PoseStamped.html))
+    * goal position and orientation
+* scan ([sensor_msgs/msg/LaserScan](https://docs.ros2.org/latest/api/sensor_msgs/msg/LaserScan.html))
+    * laser scans
+* tf ([tf2_msgs/msg/tfMessage](https://docs.ros2.org/foxy/api/tf2_msgs/msg/TFMessage.html))
+    * transforms
+
+#### Published Topics
+
+* /cmd_vel ([geometry_msgs/msg/Twist](https://docs.ros2.org/galactic/api/geometry_msgs/msg/Twist.html))
+    * the control order to the robot; published only when the parameter `online` is true
