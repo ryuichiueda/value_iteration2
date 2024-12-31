@@ -391,8 +391,6 @@ void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int 
 
 			map.data.push_back(value);
 		}
-
-	cerr << flush;
 }
 
 
