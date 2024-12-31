@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+find_package(grid_map_msgs REQUIRED)
 
 ament_auto_find_build_dependencies()
 ament_auto_add_executable(vi_node
