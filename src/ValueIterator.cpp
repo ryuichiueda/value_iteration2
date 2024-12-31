@@ -385,13 +385,14 @@ void ValueIterator::makeValueFunctionMap(nav_msgs::msg::OccupancyGrid &map, int 
 		for(int x=0; x<cell_num_x_; x++){
 			int index = toIndex(x, y, it);
 			double cost = (double)states_[index].total_cost_/prob_base_;
+			int8_t value = 100;
 			if(cost < (double)threshold)
-				map.data.push_back((int)(cost/threshold*250/2));
-			else if(states_[index].free_)
-				map.data.push_back(250/2);
-			else 
-				map.data.push_back(255/2);
+				value = (int8_t)floor(cost/threshold*100);
+
+			map.data.push_back(value);
 		}
+
+	cerr << flush;
 }
 
 
